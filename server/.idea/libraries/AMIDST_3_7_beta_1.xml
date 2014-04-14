@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="AMIDST-3.7-beta-1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/AMIDST-3.7-beta-1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/lib/AMIDST-3.7-beta-1.jar!/doc" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/AMIDST-3.7-beta-1.jar!/" />
+    </SOURCES>
+  </library>
+</component>
