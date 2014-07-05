@@ -1,3 +1,8 @@
+$(window).resize () ->
+  $('#map').height($('#minemap').width())
+  $('#minemap').height($('#minemap').width())
+
+
 biome_data = [
     ["Ocean",			     0, [0, 0, 112]],
     ["Plains",				 1, [141, 179, 96]],
@@ -95,30 +100,30 @@ request = (url, success, failure) ->
             failure()
   xhr.send()
 
-map = L.map('map',
-  crs: L.CRS.Simple
-  maxZoom: 18
-  minZoom: 14
-)
-map.setView([0,0], 16)
-canvasTiles = L.canvasTileLayer({updateWhenIdle:true, continuousWorld:true})
-canvasTiles._drawCanvasTile = (canvas, done) ->
-  ctx = canvas.getContext('2d');
-  canvas.width = 512
-  canvas.height = 512
-  request('http://localhost:8000/data?seed=0&type=Default'+'&x='+canvas.coords.x+'&y='+canvas.coords.y,
-    (data) ->
-      image_data = ctx.createImageData(canvas.width, canvas.height)
-      imdata = image_data.data
-      for d,p in data
-        c = biome_map[d].colour
-        imdata[4*p] = c[0]
-        imdata[4*p+1] = c[1]
-        imdata[4*p+2] = c[2]
-        imdata[4*p+3] = 255
-      ctx.putImageData(image_data,0,0)
-      done(false, canvas)
-    () ->
-      console.log "error")
-
-canvasTiles.addTo(map)
+#map = L.map('map',
+#  crs: L.CRS.Simple
+#  maxZoom: 18
+#  minZoom: 14
+#)
+#map.setView([0,0], 16)
+#canvasTiles = L.canvasTileLayer({updateWhenIdle:true, continuousWorld:true})
+#canvasTiles._drawCanvasTile = (canvas, done) ->
+#  ctx = canvas.getContext('2d');
+#  canvas.width = 512
+#  canvas.height = 512
+#  request('http://localhost:8000/data?seed=0&type=Default'+'&x='+canvas.coords.x+'&y='+canvas.coords.y,
+#    (data) ->
+#      image_data = ctx.createImageData(canvas.width, canvas.height)
+#      imdata = image_data.data
+#      for d,p in data
+#        c = biome_map[d].colour
+#        imdata[4*p] = c[0]
+#        imdata[4*p+1] = c[1]
+#        imdata[4*p+2] = c[2]
+#        imdata[4*p+3] = 255
+#      ctx.putImageData(image_data,0,0)
+#      done(false, canvas)
+#    () ->
+#      console.log "error")
+#
+#canvasTiles.addTo(map)
