@@ -7,7 +7,7 @@
 
 /* Space out content a bit */
 body {
-    padding-top: 20px;
+    padding-top: 0px;
     padding-bottom: 20px;
     font-family: 'Asap', sans-serif;
 }
@@ -74,7 +74,7 @@ h6,
 
 /* Supporting marketing content */
 .marketing {
-    margin: 40px 0;
+    margin: 15px 0;
 }
 
 .marketing p + h4 {
