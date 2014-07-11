@@ -1,3 +1,3 @@
 $(window).resize () ->
-  $('#map').height(Math.min($('#minemap').width(), $(window).height()*0.80))
-  $('#minemap').height(Math.min($('#minemap').width(), $(window).height()*0.80))
+  $('.leaflet-map').height(Math.min($('.minemap').width(), $(window).height()*0.80))
+  $('.minemap').height(Math.min($('.minemap').width(), $(window).height()*0.80))

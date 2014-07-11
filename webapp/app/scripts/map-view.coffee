@@ -85,20 +85,29 @@ for biome in biome_data
 
 class MapView extends Backbone.View
 
-  el: '#minemap'
+  el: '.minemap'
 
   initialize: ->
-    $('#minemap').height(Math.min($('#minemap').width(), $(window).height()*0.80))
     @model.bind 'change', @render
+    @seedInputEl = $("
+      <div class='seed-input'>
+        <input type='text'>
+        <button>Set Seed</button>
+      </div>")
+    $(@el).append(@seedInputEl)
+    @mapEl = $("
+      <div class='.leaflet-map'></div>")
+    $(@el).append(@mapEl)
     @render()
 
   render: =>
+    @mapEl.height(Math.min($(@el).width(), $(window).height()*0.80))
     if @model.get('seed') == undefined
-      $(@el).append '<button class="set-seed">Set Seed</button>'
+      @mapEl.hide()
+      @seedInputEl.show()
     else
-      $(@el).empty()
-      $(@el).append '<div id="map"></div>'
-      $('#map').height(Math.min($('#minemap').width(), $(window).height()*0.80))
+      @seedInputEl.hide()
+      @mapEl.show()
 
       request = (url, success, failure) ->
         xhr = new XMLHttpRequest();
@@ -112,7 +121,7 @@ class MapView extends Backbone.View
               failure()
         xhr.send()
 
-      map = L.map('map',
+      map = L.map(@mapEl.get(0),
         crs: L.CRS.Simple
         maxZoom: 18
         minZoom: 14
@@ -136,15 +145,17 @@ class MapView extends Backbone.View
             ctx.putImageData(image_data,0,0)
             done(false, canvas)
           () ->
-            console.log "error")
+            console.log "error"
+        )
 
       canvasTiles.addTo(map)
 
   setSeed: =>
+      console.log('set')
       @model.set
         seed: '1234'
 
-    events: 'click .set-seed': 'setSeed'
+  events: 'click .seed-input > button': 'setSeed'
 
 class Map extends Backbone.Model
   defaults:
