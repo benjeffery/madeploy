@@ -145,6 +145,9 @@ module.exports = function (grunt) {
         // Compiles CoffeeScript to JavaScript
         coffee: {
             dist: {
+                options: {
+                    sourceMap: true
+                },
                 files: [{
                     expand: true,
                     cwd: '<%= config.app %>/scripts',
