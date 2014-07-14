@@ -35,7 +35,7 @@ module.exports = function (grunt) {
             },
             coffee: {
                 files: ['<%= config.app %>/scripts/{,*/}*.{coffee,litcoffee,coffee.md}'],
-                tasks: ['coffee:dist']
+                tasks: ['copy:coffee',  'coffee:dist']
             },
             coffeeTest: {
                 files: ['test/spec/{,*/}*.{coffee,litcoffee,coffee.md}'],
@@ -150,7 +150,7 @@ module.exports = function (grunt) {
                 },
                 files: [{
                     expand: true,
-                    cwd: '<%= config.app %>/scripts',
+                    cwd: '.tmp/scripts',
                     src: '{,*/}*.{coffee,litcoffee,coffee.md}',
                     dest: '.tmp/scripts',
                     ext: '.js'
@@ -296,6 +296,15 @@ module.exports = function (grunt) {
 
         // Copies remaining files to places other tasks can use
         copy: {
+            coffee: {
+                files: [{
+                    expand: true,
+                    dot: true,
+                    cwd: '<%= config.app %>/scripts',
+                    dest: '.tmp/scripts',
+                    src: '**/*.coffee'
+                }]
+            },
             dist: {
                 files: [{
                     expand: true,
@@ -329,6 +338,7 @@ module.exports = function (grunt) {
         // Run some tasks in parallel to speed up build process
         concurrent: {
             server: [
+                'copy:coffee',
                 'coffee:dist',
                 'copy:styles'
             ],
