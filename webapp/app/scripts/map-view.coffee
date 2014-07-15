@@ -1,6 +1,5 @@
 class window.MapView extends Backbone.View
   initialize: ->
-    @model.bind 'change', @render
     @seedInputEl = $("
       <div class='seed-input'>
         <input type='text'>
@@ -13,8 +12,11 @@ class window.MapView extends Backbone.View
     @$el.append(@mapEl)
     @render()
 
+    @model.bind 'change', @render
+
+
   render: =>
-    seed = @model.get('seed')
+    seed = @model.get 'seed'
     @mapEl.height(Math.min(@$el.width(), $(window).height()*0.80))
     if seed?
       @seedInputEl.hide()
@@ -24,22 +26,33 @@ class window.MapView extends Backbone.View
       @seedInputEl.show()
     if not @map? and seed?
       @map = new MineMap(@mapEl, seed)
-
-  setSeed: () =>
+    if @map?
+      pos = @model.get 'pos'
+      dir = @model.get 'dir'
+      if pos? and dir?
+        @map.setPlayer(pos,dir)
+  setSeedFromText: () =>
     @model.set seed: @$('.seed-input > input').val()
     console.log(@model.get 'seed')
 
   setFile: (evt) =>
     @levelFile = evt.target.files[0]
+    @updateFromFile()
+
+  updateFromFile: () =>
     reader = new FileReader();
     reader.onload = () =>
       nbt.parse reader.result, (error, result) =>
         #Seed is int64 so we have to handle it as string
-        seed = result.Data.RandomSeed.toString()
-        @model.set seed:seed
-        console.log(seed)
+        @model.set
+          seed:result.Data.RandomSeed.toString()
+          pos:result.Data.Player.Pos
+          dir:result.Data.Player.Rotation
+        console.log(result.Data)
+        #We have successfully parsed the file so we can update it
+        setTimeout(@updateFromFile, 1000)
     reader.readAsBinaryString(@levelFile)
 
   events:
-    'click .seed-input > button': 'setSeed'
+    'click .seed-input > button': 'setSeedFromText'
     'change .level-file': 'setFile'

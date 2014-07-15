@@ -122,3 +122,11 @@ class window.MineMap
       () ->
         console.log "error"
     )
+
+  setPlayer: (pos, dir) =>
+    @player_marker ?= (L.marker([0,0]).addTo(@map))
+    L.marker([0,0]).addTo(@map)
+    L.marker([-10,-10]).addTo(@map)
+    L.marker([100,0]).addTo(@map)
+    L.marker([100,100]).addTo(@map)
+    #@player_marker.setLatLng([pos[0], pos[2]])
