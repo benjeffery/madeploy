@@ -67,6 +67,8 @@
 		this[nbt.tagTypes.long] = function() {
 			var upper = this.int();
 			var lower = this.int();
+            if (lower < 0)
+                lower += 4294967296;
             upper = BigInt.BigInteger(upper).multiply(4294967296);
 			return upper.add(lower);
 		};

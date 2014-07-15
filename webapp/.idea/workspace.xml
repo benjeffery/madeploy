@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="392e3bfe-1755-4d2a-81c8-6357f67673ad" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/scripts/CanvasTileLayer.coffee" afterPath="$PROJECT_DIR$/app/scripts/CanvasTileLayer.coffee" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/scripts/map-view.coffee" afterPath="$PROJECT_DIR$/app/scripts/map-view.coffee" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/scripts/map.coffee" afterPath="$PROJECT_DIR$/app/scripts/map.coffee" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nbt/nbt.js" afterPath="$PROJECT_DIR$/nbt/nbt.js" />
     </list>
     <ignored path="webapp.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -93,10 +91,10 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="CanvasTileLayer.coffee" pinned="false" current="true" current-in-tab="true">
+          <file leaf-file-name="CanvasTileLayer.coffee" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/app/scripts/CanvasTileLayer.coffee">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.81632656" vertical-offset="144" max-vertical-offset="800">
+                <state vertical-scroll-proportion="0.0" vertical-offset="144" max-vertical-offset="800">
                   <caret line="39" column="45" selection-start-line="39" selection-start-column="45" selection-end-line="39" selection-end-column="45" />
                   <folding />
                 </state>
@@ -121,6 +119,16 @@
                   <folding>
                     <marker date="1405424586877" expanded="true" signature="112:248" placeholder="..." />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="nbt.js" pinned="false" current="true" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/nbt/nbt.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.3265306" vertical-offset="768" max-vertical-offset="2672">
+                  <caret line="70" column="24" selection-start-line="70" selection-start-column="24" selection-end-line="70" selection-end-column="24" />
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -153,10 +161,10 @@
         <option value="$PROJECT_DIR$/app/scripts/main.coffee" />
         <option value="$PROJECT_DIR$/app/scripts/nbt.js" />
         <option value="$PROJECT_DIR$/nbt/main.js" />
-        <option value="$PROJECT_DIR$/nbt/nbt.js" />
         <option value="$PROJECT_DIR$/app/scripts/map-view.coffee" />
         <option value="$PROJECT_DIR$/app/scripts/map.coffee" />
         <option value="$PROJECT_DIR$/app/scripts/CanvasTileLayer.coffee" />
+        <option value="$PROJECT_DIR$/nbt/nbt.js" />
       </list>
     </option>
   </component>
@@ -944,14 +952,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/nbt/nbt.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="768" max-vertical-offset="2640">
-          <caret line="71" column="10" selection-start-line="71" selection-start-column="10" selection-end-line="71" selection-end-column="10" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/scripts/map-view.coffee">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="231" max-vertical-offset="1008">
@@ -972,8 +972,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/scripts/CanvasTileLayer.coffee">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.81632656" vertical-offset="144" max-vertical-offset="800">
+        <state vertical-scroll-proportion="0.0" vertical-offset="144" max-vertical-offset="800">
           <caret line="39" column="45" selection-start-line="39" selection-start-column="45" selection-end-line="39" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/nbt/nbt.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3265306" vertical-offset="768" max-vertical-offset="2672">
+          <caret line="70" column="24" selection-start-line="70" selection-start-column="24" selection-end-line="70" selection-end-column="24" />
           <folding />
         </state>
       </provider>
