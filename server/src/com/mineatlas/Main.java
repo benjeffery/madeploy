@@ -27,7 +27,7 @@ public class Main implements Container {
         LargeBiomes
     }
 
-    private static synchronized int[] getData(int seed, BiomeType type, int x, int y, int size) {
+    private static synchronized int[] getData(long seed, BiomeType type, int x, int y, int size) {
         MinecraftUtil.createWorld(seed, type.toString().toLowerCase()); //'default 'flat' 'amplified' 'largebiomes'
         return MinecraftUtil.getBiomeData(x * size, y * size, size, size);
     }
@@ -38,7 +38,7 @@ public class Main implements Container {
             if (request.getPath().toString().equals("/data")) {
                 final int x = Integer.parseInt(request.getParameter("x"));
                 final int y = Integer.parseInt(request.getParameter("y"));
-                final int seed = Integer.parseInt(request.getParameter("seed"));
+                final long seed = Long.parseLong(request.getParameter("seed"));
                 final BiomeType type = BiomeType.valueOf(request.getParameter("type"));
 
                 final int[] data = Main.getData(seed, type, x, y, 512);

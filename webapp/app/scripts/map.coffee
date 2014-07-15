@@ -84,7 +84,7 @@ for biome in biome_data
   biome_map[biome[1]] = {'name':biome[0], 'colour':biome[2]}
 
 class window.MineMap
-  constructor: (@el) ->
+  constructor: (@el, @seed) ->
     @map = L.map(@el.get(0), {crs: L.CRS.Simple, maxZoom: 18, minZoom: 14})
     @map.setView([0,0], 16)
     canvasTiles = L.canvasTileLayer({updateWhenIdle:true, continuousWorld:true})
@@ -107,7 +107,7 @@ class window.MineMap
     ctx = canvas.getContext('2d');
     canvas.width = 512
     canvas.height = 512
-    @request('http://localhost:8000/data?seed=0&type=Default'+'&x='+canvas.coords.x+'&y='+canvas.coords.y,
+    @request("http://localhost:8000/data?seed=#{@seed}&type=Default&x=#{canvas.coords.x}&y=#{canvas.coords.y}",
       (data) ->
         image_data = ctx.createImageData(canvas.width, canvas.height)
         imdata = image_data.data

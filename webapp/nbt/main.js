@@ -1,0 +1,1 @@
+window.nbt = require('./nbt');
