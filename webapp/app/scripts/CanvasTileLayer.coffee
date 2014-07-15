@@ -35,9 +35,7 @@ L.CanvasTileLayer = L.GridLayer.extend
     map = this._map
     options = this.options
     zoom = map.getZoom() + options.zoomOffset
-    console.log map.getZoom()
     zoomN = options.nativeZoom
-    console.log(Math.round(options.tileSize))
     return Math.round(map.getZoomScale(zoom) / map.getZoomScale(zoomN) * options.tileSize)
 
 L.canvasTileLayer = (options) ->

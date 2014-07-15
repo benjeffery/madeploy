@@ -338,7 +338,6 @@ module.exports = function (grunt) {
         // Run some tasks in parallel to speed up build process
         concurrent: {
             server: [
-                'copy:coffee',
                 'coffee:dist',
                 'copy:styles'
             ],
@@ -363,6 +362,7 @@ module.exports = function (grunt) {
 
         grunt.task.run([
             'clean:server',
+            'copy:coffee',
             'concurrent:server',
             'autoprefixer',
             'connect:livereload',

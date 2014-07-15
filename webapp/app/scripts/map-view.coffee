@@ -8,16 +8,19 @@ class window.MapView extends Backbone.View
       </div>")
     @$el.append(@seedInputEl)
     @mapEl = $("
-      <div class='.leaflet-map'></div>")
+      <div class='leaflet-map'></div>")
     @$el.append(@mapEl)
     @render()
+
+    $(window).resize () =>
+      @$el.height(Math.min(@$el.width(), $(window).height()*0.80))
+    @$el.height(Math.min(@$el.width(), $(window).height()*0.80))
 
     @model.bind 'change', @render
 
 
   render: =>
     seed = @model.get 'seed'
-    @mapEl.height(Math.min(@$el.width(), $(window).height()*0.80))
     if seed?
       @seedInputEl.hide()
       @mapEl.show()
@@ -48,7 +51,6 @@ class window.MapView extends Backbone.View
           seed:result.Data.RandomSeed.toString()
           pos:result.Data.Player.Pos
           dir:result.Data.Player.Rotation
-        console.log(result.Data)
         #We have successfully parsed the file so we can update it
         setTimeout(@updateFromFile, 1000)
     reader.readAsBinaryString(@levelFile)
