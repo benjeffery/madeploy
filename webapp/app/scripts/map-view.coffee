@@ -49,7 +49,7 @@ class window.MapView extends Backbone.View
         #Seed is int64 so we have to handle it as string
         @model.set
           seed:result.Data.RandomSeed.toString()
-          pos:result.Data.Player.Pos
+          pos:{x:result.Data.Player.Pos[0], y:result.Data.Player.Pos[2]}
           dir:result.Data.Player.Rotation
         #We have successfully parsed the file so we can update it
         setTimeout(@updateFromFile, 1000)

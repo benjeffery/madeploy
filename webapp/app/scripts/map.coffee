@@ -87,9 +87,9 @@ class window.MineMap
   constructor: (@el, @seed) ->
     @map = L.map(@el.get(0), {crs: L.CRS.Simple, maxZoom: 18, minZoom: 14})
     @map.setView([0,0], 16)
-    canvasTiles = L.canvasTileLayer({updateWhenIdle:true, continuousWorld:true})
-    canvasTiles._drawCanvasTile = @drawTile
-    canvasTiles.addTo(@map)
+    @canvasTiles = L.canvasTileLayer({updateWhenIdle:true, continuousWorld:true})
+    @canvasTiles._drawCanvasTile = @drawTile
+    @canvasTiles.addTo(@map)
 
   request: (url, success, failure) ->
     xhr = new XMLHttpRequest()
@@ -123,10 +123,10 @@ class window.MineMap
         console.log "error"
     )
 
+  map_coords: (mc_coords) =>
+    return @map.options.crs.pointToLatLng({x:mc_coords.x/8, y:mc_coords.y/8}, @canvasTiles.options.nativeZoom)
   setPlayer: (pos, dir) =>
-    @player_marker ?= (L.marker([0,0]).addTo(@map))
-    L.marker([0,0]).addTo(@map)
-    L.marker([-10,-10]).addTo(@map)
-    L.marker([100,0]).addTo(@map)
-    L.marker([100,100]).addTo(@map)
-    #@player_marker.setLatLng([pos[0], pos[2]])
+    @player_marker ?= (L.marker(@map_coords({x:0, y:0})).addTo(@map))
+    @player_marker.setLatLng(@map_coords(pos))
+    @ayer_marker ?= (L.marker(@map_coords({x:0, y:0})).addTo(@map))
+    @map.panTo(@map_coords(pos))
