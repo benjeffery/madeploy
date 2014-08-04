@@ -85,6 +85,7 @@ for biome in biome_data
 
 class window.MineMap
   constructor: (@el, @seed) ->
+    PerlinSimplex.noiseDetail(3,.5)
     @map = L.map(@el.get(0), {crs: L.CRS.Simple, maxZoom: 18, minZoom: 14})
     @map.setView([0,0], 16)
     @canvasTiles = L.canvasTileLayer({updateWhenIdle:true, continuousWorld:true})
@@ -107,16 +108,56 @@ class window.MineMap
     ctx = canvas.getContext('2d');
     canvas.width = 512
     canvas.height = 512
-    @request("http://localhost:8000/data?seed=#{@seed}&type=Default&x=#{canvas.coords.x}&y=#{canvas.coords.y}",
+    c_x = canvas.coords.x
+    c_y = canvas.coords.y
+    @request("http://localhost:8000/data?seed=#{@seed}&type=Default&x=#{c_x}&y=#{c_y}",
       (data) ->
         image_data = ctx.createImageData(canvas.width, canvas.height)
         imdata = image_data.data
-        for d,p in data
-          c = biome_map[d].colour
-          imdata[4*p] = c[0]
-          imdata[4*p+1] = c[1]
-          imdata[4*p+2] = c[2]
-          imdata[4*p+3] = 255
+        noise = new Float32Array(514*514)
+        noise_gen = PerlinSimplex.noise
+        for y in [-1 ... 513]
+          for x in [-1 ... 513]
+#            if data[x+(y*512)] == 38 or data[x+(y*512)] == 39
+            noise[(x+1)+(y+1)*514] = 0.5*(1+noise_gen((x+c_x*512)/32,(y+c_y*512)/32))
+        diffuse = new Float32Array(512*512)
+        for y in [0 ... 512]
+          for x in [0 ... 512]
+            n_x = x+1
+            n_y = y+1
+            norm_x = noise[n_x-1+n_y*514] - noise[n_x+1+n_y*514]
+            norm_y = noise[n_x+(n_y+1)*514] - noise[n_x+(n_y-1)*514]
+            norm_z = 2.0  / 16 #256.0  #2*Sxy*Sz
+            len = norm_x*norm_x + norm_y*norm_y + norm_z*norm_z
+            if len > 0.0
+              len = 1.0 / Math.sqrt(len)
+              norm_x = norm_x * len
+              norm_y = norm_y * len
+              norm_z = norm_z * len
+            d = -0.5773*norm_x + 0.5773*norm_y + 0.5773*norm_z
+            diffuse[x+y*512] = if d > 0.0 then d else 0.0
+        for y in [0 ... 512]
+          for x in [0 ... 512]
+            p = x + y*512
+            d = data[x+1+(y+1)*514]
+            c = biome_map[d].colour
+            diff = diffuse[p]
+            imdata[4*p] = c[0] * diff
+            imdata[4*p+1] = c[1] * diff
+            imdata[4*p+2] = c[2] * diff
+            imdata[4*p+3] = 255
+#        for x in [0 ... 512]
+#          for y in [0 ... 511]
+#            if data[x+((y+1)*512)] == 37 and (data[x+(y*512)] == 38 or data[x+(y*512)] == 39)
+#              for p in [0...5]
+#                p = x+((y-p)*512)
+#                if p > 0 and (data[p] == 38 or data[p] == 39)
+#                  imdata[4*p] = 100
+#                  imdata[4*p+1] = 0
+#                  imdata[4*p+2] = 1
+#                  imdata[4*p+3] = 255
+
+
         ctx.putImageData(image_data,0,0)
         done(false, canvas)
       () ->
