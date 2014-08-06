@@ -29,7 +29,7 @@ public class Main implements Container {
 
     private static int[] getData(long seed, BiomeType type, int x, int y, int size) {
         MinecraftUtil.createWorld(seed, type.toString().toLowerCase()); //'default 'flat' 'amplified' 'largebiomes'
-        return MinecraftUtil.getBiomeData(x * size-1, y * size-1, size+2, size+2);
+        return MinecraftUtil.getBiomeData(x * size-3, y * size-3, size+6, size+6);
     }
 
     public void handle(Request request, Response response) {
@@ -41,7 +41,7 @@ public class Main implements Container {
                 final long seed = Long.parseLong(request.getParameter("seed"));
                 final BiomeType type = BiomeType.valueOf(request.getParameter("type"));
 
-                final int len = 514 * 514;
+                final int len = 518 * 518;
                 byte[] byte_data = new byte[len];
                 synchronized (this){
                     final int[] data = Main.getData(seed, type, x, y, 512);
