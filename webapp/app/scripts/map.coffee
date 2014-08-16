@@ -156,6 +156,7 @@ _.keys(biome_map).forEach (key) ->
   console.log(biome_map[key])
 class window.MineMap
   constructor: (@el, @seed) ->
+    @cache = new Cache(@tileProvider, 200)
     PerlinSimplex.noiseDetail(3, .5)
     @map = L.map(@el.get(0), {crs: L.CRS.Simple, maxZoom: 18, minZoom: 14})
     @map.setView([0, 0], 16)
@@ -179,18 +180,27 @@ class window.MineMap
           failure()
     xhr.send()
 
+  tileProvider: (params, callback) =>
+    @request("http://localhost:8000/data?seed=#{@seed}&type=Default&x=#{params.c_x}&y=#{params.c_y}",
+     callback,
+     () ->
+       console.log "error"
+    )
+
+
   drawTile: (canvas, done) =>
     ctx = canvas.getContext('2d');
     canvas.width = 512
     canvas.height = 512
     c_x = canvas.coords.x
     c_y = canvas.coords.y
-    @request("http://localhost:8000/data?seed=#{@seed}&type=Default&x=#{c_x}&y=#{c_y}",
+    @cache.get({c_x:c_x, c_y:c_y},
     (data) =>
       image_data = ctx.createImageData(canvas.width, canvas.height)
       imdata = image_data.data
       height = new Float32Array(514 * 514)
-      noise_gen = PerlinSimplex.noise
+      #noise_gen = PerlinSimplex.noise
+      noise = window.perlin
       for y in [0 ... 514]
         for x in [0 ... 514]
           p_d = (x+2) + (y+2) * 518
@@ -219,7 +229,8 @@ class window.MineMap
           c = 8.5 + b * 4
           d = c * 8
           d = d - (scale/2)
-          height[p_h] = d + scale * (noise_gen(((x - 1) + c_x * 512) / 32, ((y - 1) + c_y * 512) / 32))
+          #height[p_h] = d + scale * (noise_gen(((x - 1) + c_x * 512) / 32, ((y - 1) + c_y * 512) / 32))
+          height[p_h] = d + scale * noise[p_h]
       diffuse = new Float32Array(512 * 512)
       for y in [0 ... 512]
         for x in [0 ... 512]
@@ -246,12 +257,8 @@ class window.MineMap
           imdata[4 * p + 1] = c[1] * Math.min(1, diff * 0.7 + 0.3)
           imdata[4 * p + 2] = c[2] * Math.min(1, diff * 0.7 + 0.3)
           imdata[4 * p + 3] = 255
-
-
       ctx.putImageData(image_data, 0, 0)
       done(false, canvas)
-      () ->
-        console.log "error"
     )
 
   map_coords: (mc_coords) =>
