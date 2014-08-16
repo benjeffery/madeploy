@@ -19,11 +19,9 @@ L.CanvasTileLayer = L.GridLayer.extend
       options.maxZoom--
 
   createTile: (coords, done) ->
-    canvas = document.createElement('canvas')
-    canvas.coords = coords
-    tile = document.createElement('img')
-    @_drawCanvasTile(canvas, () ->
-      tile.src = canvas.toDataURL()
+    tile = document.createElement('canvas')
+    tile.coords = coords
+    @_drawCanvasTile(tile, () ->
       done(false, tile)
     );
     #       Alt tag is set to empty string to keep screen readers from reading URL and for compliance reasons

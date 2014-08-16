@@ -1,4 +1,5 @@
 sand_col = [181, 144, 66]
+ice_col = [210,220,255]
 mesa_floor_col = [167, 87, 35]
 mesa_top_col = [147, 90, 64]
 biome_data = [
@@ -12,10 +13,10 @@ biome_data = [
   ["River", 7, [0, 0, 255]],
   ["Hell", 8, [255, 0, 0]],
   ["Sky", 9, [128, 128, 255]],
-  ["Frozen Ocean", 10, [144, 144, 160]],
-  ["Frozen River", 11, [160, 160, 255]],
-  ["Ice Plains", 12, [255, 255, 255]],
-  ["Ice Mountains", 13, [160, 160, 160]],
+  ["Frozen Ocean", 10, ice_col],#[144, 144, 160]],
+  ["Frozen River", 11, ice_col],#[160, 160, 255]],
+  ["Ice Plains", 12, ice_col],
+  ["Ice Mountains", 13, ice_col],
   ["Mushroom Island", 14, [255, 0, 255]],
   ["Mushroom Island Shore", 15, [160, 0, 255]],
   ["Beach", 16, [250, 222, 85]],
@@ -199,8 +200,9 @@ class window.MineMap
       image_data = ctx.createImageData(canvas.width, canvas.height)
       imdata = image_data.data
       height = new Float32Array(514 * 514)
-      #noise_gen = PerlinSimplex.noise
+      noise_gen = PerlinSimplex.noise
       noise = window.perlin
+      console.time('b')
       for y in [0 ... 514]
         for x in [0 ... 514]
           p_d = (x+2) + (y+2) * 518
@@ -228,9 +230,11 @@ class window.MineMap
           b = a * 8.5 / 8
           c = 8.5 + b * 4
           d = c * 8
-          d = d - (scale/2)
-          #height[p_h] = d + scale * (noise_gen(((x - 1) + c_x * 512) / 32, ((y - 1) + c_y * 512) / 32))
-          height[p_h] = d + scale * noise[p_h]
+          #d = d - (scale/2)
+          height[p_h] = d + scale * ((noise_gen(((x - 1) + c_x * 512) / 32, ((y - 1) + c_y * 512) / 32))*2-1)
+          #height[p_h] = d + scale * (noise[p_h]*2-1)
+      console.timeEnd('b')
+      console.time('d')
       diffuse = new Float32Array(512 * 512)
       for y in [0 ... 512]
         for x in [0 ... 512]
@@ -247,6 +251,8 @@ class window.MineMap
             norm_z = norm_z * len
           d = -0.5773 * norm_x + 0.5773 * norm_y + 0.5773 * norm_z
           diffuse[x + y * 512] = if d > 0.0 then d else 0.0
+      console.timeEnd('d')
+      console.time('w')
       for y in [0 ... 512]
         for x in [0 ... 512]
           p = x + y * 512
@@ -258,6 +264,7 @@ class window.MineMap
           imdata[4 * p + 2] = c[2] * Math.min(1, diff * 0.7 + 0.3)
           imdata[4 * p + 3] = 255
       ctx.putImageData(image_data, 0, 0)
+      console.timeEnd('w')
       done(false, canvas)
     )
 
