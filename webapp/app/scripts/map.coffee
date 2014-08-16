@@ -256,8 +256,8 @@ class window.MineMap
 
   map_coords: (mc_coords) =>
     return @map.options.crs.pointToLatLng({x: mc_coords.x / 8, y: mc_coords.y / 8}, @canvasTiles.options.nativeZoom)
+
   setPlayer: (pos, dir) =>
     @player_marker ?= (L.marker(@map_coords({x: 0, y: 0})).addTo(@map))
     @player_marker.setLatLng(@map_coords(pos))
-    @ayer_marker ?= (L.marker(@map_coords({x: 0, y: 0})).addTo(@map))
     @map.panTo(@map_coords(pos))

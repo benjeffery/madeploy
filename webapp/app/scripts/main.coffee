@@ -2,6 +2,11 @@ class MapState extends Backbone.Model
 #  defaults:
 #   seed: nul
 
+map_state = new MapState
 map_view = new MapView
-  model: new MapState
+  model: map_state
   el: '.minemap'
+
+map_info_view = new MapInfoView
+  model: map_state
+  el: '.mapinfo'

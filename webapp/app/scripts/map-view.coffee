@@ -16,8 +16,14 @@ class window.MapView extends Backbone.View
       @$el.height(Math.min(@$el.width(), $(window).height()*0.80))
     @$el.height(Math.min(@$el.width(), $(window).height()*0.80))
 
-    @model.bind 'change', @render
-
+    @model.on
+      'change:seed': @render,
+      'change:pos change:dir': () =>
+        if @map?
+          pos = @model.get 'pos'
+          dir = @model.get 'dir'
+          if pos? and dir?
+            @map.setPlayer(pos,dir)
 
   render: =>
     seed = @model.get 'seed'
@@ -29,14 +35,9 @@ class window.MapView extends Backbone.View
       @seedInputEl.show()
     if not @map? and seed?
       @map = new MineMap(@mapEl, seed)
-    if @map?
-      pos = @model.get 'pos'
-      dir = @model.get 'dir'
-      if pos? and dir?
-        @map.setPlayer(pos,dir)
+
   setSeedFromText: () =>
     @model.set seed: @$('.seed-input > input').val()
-    console.log(@model.get 'seed')
 
   setFile: (evt) =>
     @levelFile = evt.target.files[0]
