@@ -2,8 +2,11 @@ sand_col = [181, 144, 66]
 ice_col = [210,220,255]
 mesa_floor_col = [167, 87, 35]
 mesa_top_col = [147, 90, 64]
+sea_col = [10,51,130]
+deep_sea_col = [10,51,80]
+savanna_col = [189, 218, 95]
 biome_data = [
-  ["Ocean", 0, [0, 0, 112]],
+  ["Ocean", 0, sea_col],#[0, 0, 112]],
   ["Plains", 1, [141, 179, 96]],
   ["Desert", 2, sand_col],
   ["Extreme Hills", 3, [96, 96, 96]],
@@ -27,7 +30,7 @@ biome_data = [
   ["Jungle", 21, [83, 123, 9]],
   ["Jungle Hills", 22, [44, 66, 5]],
   ["Jungle Edge", 23, [98, 139, 23]],
-  ["Deep Ocean", 24, [0, 0, 48]],
+  ["Deep Ocean", 24, deep_sea_col], #[0, 0, 48]],
   ["Stone Beach", 25, [162, 162, 132]],
   ["Cold Beach", 26, [250, 240, 192]],
   ["Birch Forest", 27, [48, 116, 68]],
@@ -38,8 +41,8 @@ biome_data = [
   ["Mega Taiga", 32, [89, 102, 81]],
   ["Mega Taiga Hills", 33, [69, 79, 62]],
   ["Extreme Hills+", 34, [80, 112, 80]],
-  ["Savanna", 35, [189, 178, 95]],
-  ["Savanna Plateau", 36, [167, 157, 100]],
+  ["Savanna", 35, savanna_col],#[189, 178, 95]],
+  ["Savanna Plateau", 36, savanna_col]#,36, [167, 157, 100]],
   ["Mesa", 37, mesa_floor_col],
   ["Mesa Plateau F", 38, mesa_top_col],
   ["Mesa Plateau", 39, mesa_top_col],
@@ -149,7 +152,10 @@ heights = [
 ]
 self.biome_map = {};
 for biome in biome_data
-  self.biome_map[biome[1]] = {'name': biome[0], 'colour': biome[2]}
+  if biome[0] == 'Ocean' or biome[0] == 'Deep Ocean'
+    self.biome_map[biome[1]] = {'name': biome[0], 'colour': biome[2], 'ocean':true}
+  else
+    self.biome_map[biome[1]] = {'name': biome[0], 'colour': biome[2]}
 for height in heights
   self.biome_map[height[0]].offset = height[1]
   self.biome_map[height[0]].scale = 40*(height[2])# * 0.9 + 0.1)

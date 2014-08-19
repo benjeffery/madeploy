@@ -1,6 +1,6 @@
 class window.MineMap
   constructor: (@el, @seed) ->
-    @cache = new Cache(@tileProvider, 200)
+    @cache = new Cache(@tileProvider, 75)
     @map = L.map(@el.get(0), {crs: L.CRS.Simple, maxZoom: 18, minZoom: 14})
     @map.setView([0, 0], 16)
     @canvasTiles = L.canvasTileLayer({updateWhenIdle: true, continuousWorld: true})
@@ -15,14 +15,14 @@ class window.MineMap
         for y in [-2 ... 2]
           for x in [-2 ... 2]
             @parabolic[x + 2 + (y+2)*5] =  10.0 / Math.sqrt((y * y + x * x) + 0.2)
-        null
+
       calc_pixels: (data, callback) ->
         b_data = new Uint8Array(data.biome_data)
-        imdata = new Uint8ClampedArray(data.imdata)
         c_x = data.c_x
         c_y = data.c_y
         height_map = new Float32Array(514 * 514)
         noise_gen = self.PerlinSimplex.noise
+        biome_map = self.biome_map
       #  noise = window.perlin
         console.time('b')
         for y in [0 ... 514]
@@ -75,20 +75,21 @@ class window.MineMap
             diffuse[x + y * 512] = if d > 0.0 then d else 0.0
         console.timeEnd('d')
         console.time('w')
+        pixels = new Uint8ClampedArray(512*512*4)
         for y in [0 ... 512]
           for x in [0 ... 512]
             p = x + y * 512
-            d = b_data[x + 3 + (y + 3) * 518]
-            c = biome_map[d].colour
+            biome = biome_map[b_data[x + 3 + (y + 3) * 518]]
+            c = biome.colour
             diff = diffuse[p]
-            imdata[4 * p] = c[0] * Math.min(1, diff * 0.7 + 0.3)
-            imdata[4 * p + 1] = c[1] * Math.min(1, diff * 0.7 + 0.3)
-            imdata[4 * p + 2] = c[2] * Math.min(1, diff * 0.7 + 0.3)
-            imdata[4 * p + 3] = 255
+            pixels[4 * p] = c[0] * Math.min(1, diff * 0.7 + 0.3)
+            pixels[4 * p + 1] = c[1] * Math.min(1, diff * 0.7 + 0.3)
+            pixels[4 * p + 2] = c[2] * Math.min(1, diff * 0.7 + 0.3)
+            pixels[4 * p + 3] = 255
         console.timeEnd('w')
-        callback([imdata.buffer, b_data.buffer])
+        callback({pixels:pixels}, [pixels.buffer])
     }
-    @workers = cw(@worker_funcs, 1)
+    @workers = cw(@worker_funcs, 4)
 
   request: (url, success, failure) ->
     xhr = new XMLHttpRequest()
@@ -104,8 +105,11 @@ class window.MineMap
 
   tileProvider: (params, callback) =>
     @request("http://localhost:8000/data?seed=#{@seed}&type=Default&x=#{params.c_x}&y=#{params.c_y}",
-     callback,
-     () ->
+      (biome_data) =>
+        data = {biome_data:biome_data.buffer, c_x:params.c_x, c_y:params.c_y}
+        @workers.calc_pixels(data, [data.biome_data]).then (ret_data) ->
+          callback(new Uint8ClampedArray(ret_data.pixels))
+      () ->
        console.log "error"
     )
 
@@ -117,12 +121,16 @@ class window.MineMap
     c_x = canvas.coords.x
     c_y = canvas.coords.y
     @cache.get({c_x:c_x, c_y:c_y},
-      (biome_data) =>
-        image_data = ctx.createImageData(canvas.width, canvas.height)
-        imdata = image_data.data
-        @workers.calc_pixels(biome_data:biome_data.buffer, imdata:imdata.buffer, c_x:c_x, c_y:c_y, [biome_data.buffer, imdata.buffer]).then (data) ->
-          ctx.putImageData(image_data, 0, 0)
-          done(false, canvas)
+      (pixels) =>
+        imageData = ctx.createImageData(canvas.width, canvas.height)
+        data = imageData.data
+        if (data.set)
+          data.set(pixels)
+        else
+          index = data.length - 1
+          (data[index] = pixels[index]) while (index--)
+        ctx.putImageData(imageData, 0, 0);
+        done(false, canvas)
       )
 
 
