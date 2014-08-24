@@ -82,9 +82,9 @@ class window.MineMap
             biome = biome_map[b_data[x + 3 + (y + 3) * 518]]
             c = biome.colour
             diff = diffuse[p]
-            pixels[4 * p] = c[0] * Math.min(1, diff * 0.7 + 0.3)
-            pixels[4 * p + 1] = c[1] * Math.min(1, diff * 0.7 + 0.3)
-            pixels[4 * p + 2] = c[2] * Math.min(1, diff * 0.7 + 0.3)
+            pixels[4 * p] = c[0] * Math.min(1, diff * 0.6 + 0.4)
+            pixels[4 * p + 1] = c[1] * Math.min(1, diff * 0.6 + 0.4)
+            pixels[4 * p + 2] = c[2] * Math.min(1, diff * 0.6 + 0.4)
             pixels[4 * p + 3] = 255
         console.timeEnd('w')
         callback({pixels:pixels}, [pixels.buffer])
@@ -136,6 +136,12 @@ class window.MineMap
 
   map_coords: (mc_coords) =>
     return @map.options.crs.pointToLatLng({x: mc_coords.x / 8, y: mc_coords.y / 8}, @canvasTiles.options.nativeZoom)
+
+  mc_coords: (latlng) =>
+    pos = @map.options.crs.latLngToPoint(latlng, @canvasTiles.options.nativeZoom)
+    pos.x *= 8
+    pos.y *= 8
+    return pos
 
   setPlayer: (pos, dir) =>
     @player_marker ?= (L.marker(@map_coords({x: 0, y: 0})).addTo(@map))

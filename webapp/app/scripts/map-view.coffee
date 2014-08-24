@@ -35,6 +35,10 @@ class window.MapView extends Backbone.View
       @seedInputEl.show()
     if not @map? and seed?
       @map = new MineMap(@mapEl, seed)
+      @map.map.on 'mousemove', (e) =>
+        console.log @map.mc_coords(e.latlng)
+        @model.set mouse: @map.mc_coords(e.latlng)
+
 
   setSeedFromText: () =>
     @model.set seed: @$('.seed-input > input').val()

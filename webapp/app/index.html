@@ -109,6 +109,9 @@
 
         <script type="text/template" id="mapinfo-template">
             <div class="seed">Seed:<%= seed %></div>
+            <% if (typeof(mouse) != "undefined") { %>
+            <div class="mouse">Pos:<%= Math.round(mouse.x) %>, <%= Math.round(mouse.y) %>,</div>
+            <% } %>
         </script>
 
 
