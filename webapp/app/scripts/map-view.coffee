@@ -36,8 +36,9 @@ class window.MapView extends Backbone.View
     if not @map? and seed?
       @map = new MineMap(@mapEl, seed)
       @map.map.on 'mousemove', (e) =>
-        console.log @map.mc_coords(e.latlng)
-        @model.set mouse: @map.mc_coords(e.latlng)
+        mc_coords = @map.mc_coords(e.latlng)
+        @model.set mouse: mc_coords
+        @model.set mouse_biome: @map.biome_at(mc_coords)
 
 
   setSeedFromText: () =>

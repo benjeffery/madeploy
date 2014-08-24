@@ -87,7 +87,7 @@ class window.MineMap
             pixels[4 * p + 2] = c[2] * Math.min(1, diff * 0.6 + 0.4)
             pixels[4 * p + 3] = 255
         console.timeEnd('w')
-        callback({pixels:pixels}, [pixels.buffer])
+        callback({pixels:pixels, biomes:b_data}, [pixels.buffer, b_data.buffer])
     }
     @workers = cw(@worker_funcs, 4)
 
@@ -108,7 +108,7 @@ class window.MineMap
       (biome_data) =>
         data = {biome_data:biome_data.buffer, c_x:params.c_x, c_y:params.c_y}
         @workers.calc_pixels(data, [data.biome_data]).then (ret_data) ->
-          callback(new Uint8ClampedArray(ret_data.pixels))
+          callback([new Uint8Array(ret_data.biomes), new Uint8ClampedArray(ret_data.pixels)])
       () ->
        console.log "error"
     )
@@ -121,7 +121,7 @@ class window.MineMap
     c_x = canvas.coords.x
     c_y = canvas.coords.y
     @cache.get({c_x:c_x, c_y:c_y},
-      (pixels) =>
+      ([biomes, pixels]) =>
         imageData = ctx.createImageData(canvas.width, canvas.height)
         data = imageData.data
         if (data.set)
@@ -142,6 +142,20 @@ class window.MineMap
     pos.x *= 8
     pos.y *= 8
     return pos
+
+  tile_coords: (mc_coords) =>
+    return {c_x:Math.floor(mc_coords.x / (4*512)), c_y:Math.floor(mc_coords.y / (4*512))}
+
+  biome_at: (mc_coords) =>
+    tc = @tile_coords(mc_coords)
+    data = @cache.get(tc)
+    mc_coords.x = Math.floor(mc_coords.x/4) - (tc.c_x * 512)
+    mc_coords.y = Math.floor(mc_coords.y/4) - (tc.c_y * 512)
+    if (data)
+      [biomes, pixels] = data
+    else
+      return null
+    return window.biome_map[biomes[mc_coords.x + 3 + (mc_coords.y + 3) * 518]]
 
   setPlayer: (pos, dir) =>
     @player_marker ?= (L.marker(@map_coords({x: 0, y: 0})).addTo(@map))
