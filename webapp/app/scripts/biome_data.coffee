@@ -1,91 +1,85 @@
 sand_col = [181, 144, 66]
 ice_col = [210,220,255]
+blue_ice_col = [180,190,255]
 mesa_floor_col = [167, 87, 35]
 mesa_top_col = [147, 90, 64]
 sea_col = [10,51,130]
 deep_sea_col = [10,51,80]
 savanna_col = [189, 218, 95]
+mushroom_col = [201, 152, 119]
 biome_data = [
   ["Ocean", 0, sea_col],#[0, 0, 112]],
-  ["Plains", 1, [141, 179, 96]],
-  ["Desert", 2, sand_col],
-  ["Extreme Hills", 3, [96, 96, 96]],
-  ["Forest", 4, [5, 102, 33]],
-  ["Taiga", 5, [11, 102, 89]],
-  ["Swampland", 6, [7, 249, 178]],
-  ["River", 7, [0, 0, 255]],
-  ["Hell", 8, [255, 0, 0]],
-  ["Sky", 9, [128, 128, 255]],
-  ["Frozen Ocean", 10, ice_col],#[144, 144, 160]],
-  ["Frozen River", 11, ice_col],#[160, 160, 255]],
-  ["Ice Plains", 12, ice_col],
-  ["Ice Mountains", 13, ice_col],
-  ["Mushroom Island", 14, [255, 0, 255]],
-  ["Mushroom Island Shore", 15, [160, 0, 255]],
-  ["Beach", 16, [250, 222, 85]],
-  ["Desert Hills", 17, sand_col],#[210, 95, 18]],
-  ["Forest Hills", 18, [34, 85, 28]],
-  ["Taiga Hills", 19, [22, 57, 51]],
-  ["Extreme Hills Edge", 20, [114, 120, 154]],
-  ["Jungle", 21, [83, 123, 9]],
-  ["Jungle Hills", 22, [44, 66, 5]],
-  ["Jungle Edge", 23, [98, 139, 23]],
   ["Deep Ocean", 24, deep_sea_col], #[0, 0, 48]],
+  ["Frozen Ocean", 10, blue_ice_col],#[144, 144, 160]],
+  ["River", 7, sea_col],
+  ["Frozen River", 11, blue_ice_col],#[160, 160, 255]],
+  ["Beach", 16, [250, 222, 85]],
   ["Stone Beach", 25, [162, 162, 132]],
-  ["Cold Beach", 26, [250, 240, 192]],
+  ["Cold Beach", 26, ice_col],
+
+
+  ["Plains", 1, [141, 179, 96]],
+  ["Sunflower Plains", 129, [141, 179, 96]],
+
+  ["Desert", 2, sand_col],
+  ["Desert Hills", 17, sand_col],#[210, 95, 18]],
+  ["Desert M", 130, sand_col], #water patches
+
+  ["Extreme Hills", 3, [96, 96, 96]],
+  ["Extreme Hills Edge", 20, [114, 120, 154]],
+  ["Extreme Hills M", 131, [96, 96, 96]],
+  ["Extreme Hills+", 34, [80, 112, 80]],
+  ["Extreme Hills+ M", 162, [80, 112, 80]],
+
+  ["Forest", 4, [5, 102, 33]],
+  ["Forest Hills", 18, [34, 85, 28]],
   ["Birch Forest", 27, [48, 116, 68]],
   ["Birch Forest Hills", 28, [31, 95, 50]],
+  ["Birch Forest M", 155, [48, 116, 68]],
+  ["Birch Forest Hills M", 156, [31, 95, 50]],
   ["Roofed Forest", 29, [64, 81, 26]],
+  ["Roofed Forest M", 157, [64, 81, 26]],
+  ["Flower Forest", 132, [5, 102, 33]],
+
+  ["Taiga", 5, [11, 102, 89]],
+  ["Taiga Hills", 19, [22, 57, 51]],
   ["Cold Taiga", 30, [49, 85, 74]],
+  ["Cold Taiga M", 158, [49, 85, 74]]
   ["Cold Taiga Hills", 31, [36, 63, 54]],
   ["Mega Taiga", 32, [89, 102, 81]],
   ["Mega Taiga Hills", 33, [69, 79, 62]],
-  ["Extreme Hills+", 34, [80, 112, 80]],
+  ["Taiga M", 133, [11, 102, 89]],
+  ["Mega Spruce Taiga", 160, [89, 102, 81]],
+  ["Mega Spruce Taiga (Hills)", 161, [69, 79, 62]],
+
+  ["Swampland", 6, [7, 249, 178]],
+  ["Swampland M", 134, [7, 249, 178]],
+
+  ["Ice Plains", 12, ice_col],
+  ["Ice Plains Spikes", 140, ice_col, 'spikes'],
+  ["Ice Mountains", 13, ice_col],
+
+  ["Mushroom Island", 14, mushroom_col, 'mushroom'],
+  ["Mushroom Island Shore", 15, mushroom_col],
+
+
+  ["Jungle", 21, [83, 123, 9]],
+  ["Jungle Hills", 22, [44, 66, 5]],
+  ["Jungle Edge", 23, [98, 139, 23]],
+  ["Jungle M", 149, [83, 123, 9]],
+  ["Jungle Edge M", 151, [98, 139, 23]],
+
   ["Savanna", 35, savanna_col],#[189, 178, 95]],
-  ["Savanna Plateau", 36, savanna_col]#,36, [167, 157, 100]],
+  ["Savanna Plateau", 36, savanna_col],#[167, 157, 100]],
+  ["Savanna M", 163, savanna_col],#[189, 178, 95]],
+  ["Savanna Plateau M", 164, savanna_col],#[167, 157, 100]],
+
   ["Mesa", 37, mesa_floor_col],
   ["Mesa Plateau F", 38, mesa_top_col],
   ["Mesa Plateau", 39, mesa_top_col],
-  ["Ocean M", 128, [0, 0, 112]],
-  ["Sunflower Plains", 129, [141, 179, 96]],
-  ["Desert M", 130, [250, 148, 24]],
-  ["Extreme Hills M", 131, [96, 96, 96]],
-  ["Flower Forest", 132, [5, 102, 33]],
-  ["Taiga M", 133, [11, 102, 89]],
-  ["Swampland M", 134, [7, 249, 178]],
-  ["River M", 135, [0, 0, 255]],
-  ["Hell M", 136, [255, 0, 0]],
-  ["Sky M", 137, [128, 128, 255]],
-  ["Frozen Ocean M", 138, [144, 144, 160]],
-  ["Frozen River M", 139, [160, 160, 255]],
-  ["Ice Plains Spikes", 140, [140, 180, 180]],
-  ["Ice Mountains M", 141, [160, 160, 160]],
-  ["Mushroom Island M", 142, [255, 0, 255]],
-  ["Mushroom Island Shore M", 143, [160, 0, 255]],
-  ["Beach M", 144, [250, 222, 85]],
-  ["Desert Hills M", 145, [210, 95, 18]],
-  ["Forest Hills M", 146, [34, 85, 28]],
-  ["Taiga Hills M", 147, [22, 57, 51]],
-  ["Extreme Hills Edge M", 148, [114, 120, 154]],
-  ["Jungle M", 149, [83, 123, 9]],
-  ["Jungle Hills M", 150, [44, 66, 5]],
-  ["Jungle Edge M", 151, [98, 139, 23]],
-  ["Deep Ocean M", 152, [0, 0, 48]],
-  ["Stone Beach M", 153, [162, 162, 132]],
-  ["Cold Beach M", 154, [250, 240, 192]],
-  ["Birch Forest M", 155, [48, 116, 68]],
-  ["Birch Forest Hills M", 156, [31, 95, 50]],
-  ["Roofed Forest M", 157, [64, 81, 26]],
-  ["Cold Taiga M", 158, [49, 85, 74]],
-  ["Cold Taiga Hills M", 159, [36, 63, 54]],
-  ["Mega Spruce Taiga", 160, [89, 102, 81]],
-  ["Mega Spruce Taiga (Hills)", 161, [69, 79, 62]],
-  ["Extreme Hills+ M", 162, [80, 112, 80]],
-  ["Savanna M", 163, [189, 178, 95]],
-  ["Savanna Plateau M", 164, [167, 157, 100]],
-  ["Mesa (Bryce)", 165, [217, 69, 21]],
-  ["Mesa Plateau F M", 166, [176, 151, 101]],
-  ["Mesa Plateau M", 167, [202, 140, 101]]
+  ["Mesa (Bryce)", 165, mesa_floor_col, 'spikes'],#[217, 69, 21]],
+  ["Mesa Plateau F M", 166, mesa_top_col],#[176, 151, 101]],
+  ["Mesa Plateau M", 167, mesa_top_col],#[202, 140, 101]]
 ]
 heights = [
   [0, -1.000000, 0],#0.100000],
@@ -96,9 +90,7 @@ heights = [
   [5, 0.200000, 0.200000],
   [6, -0.200000, 0.100000],
   [7, -0.500000, 0.000000],
-  [8, 0.100000, 0.200000],
-  [9, 0.100000, 0.200000],
-  [10, -1.000000, 0.100000],
+  [10, -1.000000, 0]#0.100000],
   [11, -0.500000, 0.000000],
   [12, 0.125000, 0.050000],
   [13, 0.450000, 0.300000],
@@ -150,12 +142,9 @@ heights = [
   [166, 0.450000, 0.300000],
   [167, 0.450000, 0.300000],
 ]
-self.biome_map = {};
+self.biome_map = {}
 for biome in biome_data
-  if biome[0] == 'Ocean' or biome[0] == 'Deep Ocean'
-    self.biome_map[biome[1]] = {'name': biome[0], 'colour': biome[2], 'ocean':true}
-  else
-    self.biome_map[biome[1]] = {'name': biome[0], 'colour': biome[2]}
+  self.biome_map[biome[1]] = {'name': biome[0], 'colour': biome[2], 'decorator':biome[3]}
 for height in heights
   self.biome_map[height[0]].offset = height[1]
   self.biome_map[height[0]].scale = 40*(height[2])# * 0.9 + 0.1)
