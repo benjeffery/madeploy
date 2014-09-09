@@ -8,8 +8,10 @@ class window.MineMap
     @canvasTiles.addTo(@map)
     @worker_funcs = {
       init: () ->
+        importScripts('scripts/seedrandom.js')
         importScripts('scripts/perlin.js')
         importScripts('scripts/biome_data.js')
+        importScripts('scripts/seedrandom.js')
         self.PerlinSimplex.noiseDetail(3, .5)
         @parabolic = new Float32Array(25);
         for y in [-2 ... 2]
@@ -87,6 +89,20 @@ class window.MineMap
             pixels[4 * p + 2] = c[2] * Math.min(1, diff * 0.6 + 0.4)
             pixels[4 * p + 3] = 255
         console.timeEnd('w')
+        seen = new Uint8Array(518*518)
+        for y in [0 ... 518]
+          for x in [0 ... 518]
+            if seen[x + y * 518]
+              continue
+            to_check = [[x, y]]
+            (
+              pixel = to_check.pop()
+            ) while (to_check.length)
+            #current_biome = b_data[x + 3 + (y + 3) * 518]
+            #[tot_x, tot_y] = [0,0]
+
+
+
         callback({pixels:pixels, biomes:b_data}, [pixels.buffer, b_data.buffer])
     }
     @workers = cw(@worker_funcs, 4)
