@@ -1,3 +1,5 @@
+L.Icon.Default.imagePath = '/styles/images'
+
 class MapState extends Backbone.Model
 #  defaults:
 #   seed: nul
@@ -10,3 +12,5 @@ map_view = new MapView
 map_info_view = new MapInfoView
   model: map_state
   el: '.mapinfo'
+
+#map_state.set({seed:0})

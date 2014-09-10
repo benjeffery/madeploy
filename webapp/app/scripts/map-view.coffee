@@ -38,7 +38,7 @@ class window.MapView extends Backbone.View
       @map.map.on 'mousemove', (e) =>
         mc_coords = @map.mc_coords(e.latlng)
         @model.set mouse: mc_coords
-        @model.set mouse_biome: @map.biome_at(mc_coords)
+        @model.set mouse_biome: @map.biomeAt(mc_coords)
 
 
   setSeedFromText: () =>
@@ -54,7 +54,7 @@ class window.MapView extends Backbone.View
       nbt.parse reader.result, (error, result) =>
         #Seed is int64 so we have to handle it as string
         @model.set
-          seed:result.Data.RandomSeed.toString()
+          seed:result.Data.RandomSeed
           pos:{x:result.Data.Player.Pos[0], y:result.Data.Player.Pos[2]}
           dir:result.Data.Player.Rotation
         #We have successfully parsed the file so we can update it

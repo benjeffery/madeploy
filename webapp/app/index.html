@@ -68,12 +68,21 @@
 
         </div>
 
+        <script type="text/template" id="mapinfo-template">
+            <div class="seed">Seed:<%= seed.toString() %></div>
+            <% if (typeof(mouse) != "undefined") { %>
+            <div class="mouse">Pos:<%= Math.round(mouse.x) %>, <%= Math.round(mouse.y) %><br/>
+                Chunk:<%= Math.floor(mouse.x/16) %>, <%= Math.floor(mouse.y/16) %>
+            </div>
+            <% } %>
+            <% if (typeof(mouse_biome) != "undefined" && mouse_biome) { %>
+            <div class="biome">Biome:<%= mouse_biome.name %></div>
+            <% } %>
+        </script>
 
         <!-- build:js scripts/vendor.js -->
         <!-- bower:js -->
         <script src="../bower_components/jquery/dist/jquery.js"></script>
-        <script src="../bower_components/leaflet/dist/leaflet.js"></script>
-        <script src="../bower_components/leaflet/dist/leaflet-src.js"></script>
         <script src="../bower_components/underscore/underscore.js"></script>
         <script src="../bower_components/backbone/backbone.js"></script>
         <script src="../bower_components/long/dist/Long.js"></script>
@@ -103,22 +112,11 @@
         <script src="scripts/java_rand.js"></script>
         <script src="scripts/biome_data.js"></script>
         <script src="scripts/cache.js"></script>
+        <script src="scripts/biome-tile-layer.js"></script>
         <script src="scripts/map.js"></script>
         <script src="scripts/map-view.js"></script>
         <script src="scripts/map-info-view.js"></script>
         <script src="scripts/main.js"></script>
         <!-- endbuild -->
-
-        <script type="text/template" id="mapinfo-template">
-            <div class="seed">Seed:<%= seed %></div>
-            <% if (typeof(mouse) != "undefined") { %>
-            <div class="mouse">Pos:<%= Math.round(mouse.x) %>, <%= Math.round(mouse.y) %>,</div>
-            <% } %>
-            <% if (typeof(mouse_biome) != "undefined" && mouse_biome) { %>
-            <div class="biome">Biome:<%= mouse_biome.name %></div>
-            <% } %>
-        </script>
-
-
     </body>
 </html>
