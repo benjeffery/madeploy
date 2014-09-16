@@ -69,10 +69,10 @@ class window.MineMap
           c_x -= p1 - 1
         if c_y < 0
           c_y -= p1 - 1
-        x = Long.fromInt(c_x)
-        y = Long.fromInt(c_y)
-        x = x.div(p1)
-        y = y.div(p1)
+        x = c_x
+        y = c_y
+        x = Long.fromInt(~~(x / p1))
+        y = Long.fromInt(~~(y / p1))
         seed = x.multiply(Long.fromString('341873128712'))
           .add(y.multiply(Long.fromString('132897987541')))
           .add(@seed)
