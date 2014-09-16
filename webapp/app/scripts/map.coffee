@@ -71,17 +71,17 @@ class window.MineMap
           c_y -= p1 - 1
         x = c_x
         y = c_y
-        x = Long.fromInt(~~(x / p1))
-        y = Long.fromInt(~~(y / p1))
-        seed = x.multiply(Long.fromString('341873128712'))
-          .add(y.multiply(Long.fromString('132897987541')))
+        x = ~~(x / p1)
+        y = ~~(y / p1)
+        seed = Long.fromInt(x).multiply(341873128712)
+          .add(Long.fromInt(y).multiply(132897987541))
           .add(@seed)
-          .add(Long.fromString('10387312'))
+          .add(10387312)
         rand = new JavaRand(seed)
-        x = x.multiply(p1)
-        y = y.multiply(p1)
-        x = x.add(rand.nextInt(p1-p2)).toInt()
-        y = y.add(rand.nextInt(p1-p2)).toInt()
+        x = x*p1
+        y = y*p1
+        x = x+rand.nextInt(p1-p2)
+        y = y+rand.nextInt(p1-p2)
         c_x = original_x
         c_y = original_y
         if c_x == x && c_y == y
