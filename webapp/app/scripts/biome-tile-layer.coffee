@@ -1,6 +1,7 @@
 class window.BiomeTileLayer
   constructor: (options) ->
     @layer = L.canvasTileLayer(options)
+    @update_callback = options.update_callback
     @layer._drawCanvasTile = @_drawCanvasTile
     @cache = new Cache(@tileProvider, 75)
     @worker_funcs = {
@@ -119,6 +120,8 @@ class window.BiomeTileLayer
         (data[index] = pixels[index]) while (index--)
       ctx.putImageData(imageData, 0, 0);
       done(false, canvas)
+      if (@update_callback)
+        @update_callback()
     )
 
   request: (url, success, failure) ->

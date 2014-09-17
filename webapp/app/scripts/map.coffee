@@ -3,7 +3,7 @@ class window.MineMap
     @map = L.map(@el.get(0), {crs: L.CRS.Simple, maxZoom: 18, minZoom: 14})
     @map.setView([0, 0], 16)
 
-    @biomeTiles = new BiomeTileLayer({updateWhenIdle: true, continuousWorld: true})
+    @biomeTiles = new BiomeTileLayer({updateWhenIdle: true, continuousWorld: true, update_callback: @tile_drawn})
     @biomeTiles.seed = @seed
     @biomeTiles.layer.addTo(@map)
 
@@ -11,6 +11,8 @@ class window.MineMap
     @markers.Villages = L.layerGroup();
     @markers['Jungle Temples'] = L.layerGroup();
     @markers['Desert Temples'] = L.layerGroup();
+    @markers['Witch Huts'] = L.layerGroup();
+
     for name, layer of @markers
       @map.addLayer(layer)
     L.control.layers({}, @markers, {collapsed:false}).addTo(@map);
@@ -46,29 +48,51 @@ class window.MineMap
     @player_marker.setLatLng(@map_coords(pos))
     @map.panTo(@map_coords(pos))
 
+  tile_drawn: () =>
+    @repaintMarkers()
+
   repaintMarkers: () ->
-    for name, markers of @markers
-      markers.clearLayers()
+    features = {}
     bounds = @map.getBounds()
     top_left = @mc_coords(bounds.getNorthWest())
     bottom_right = @mc_coords(bounds.getSouthEast())
     p1 = 32
     p2 = 8
-    village_chunks = {
+    feature_chunk = {
       top: Math.floor(top_left.y / 16 / p1),
       left: Math.floor(top_left.x / 16 / p1),
       bottom: Math.ceil(bottom_right.y / 16 / p1),
       right: Math.ceil(bottom_right.x / 16 / p1),
     }
-    console.time('v')
-    for c_y in [village_chunks.top..village_chunks.bottom]
-      for c_x in [village_chunks.left..village_chunks.right]
+    for c_y in [feature_chunk.top..feature_chunk.bottom]
+      for c_x in [feature_chunk.left..feature_chunk.right]
         seed = Long.fromInt(c_x).multiply(341873128712)
           .add(Long.fromInt(c_y).multiply(132897987541))
           .add(@seed)
-          .add(10387312)
-        rand = new JavaRand(seed)
-        x = rand.nextInt(p1-p2)
-        y = rand.nextInt(p1-p2)
-        L.marker(@map_coords({x: (c_x*32+x)*16, y: (c_y*32+y)*16})).addTo(@markers.Villages)
-    console.timeEnd('v')
+        village_seed = seed.add(10387312)
+        rand = new JavaRand(village_seed)
+        coords = {
+          x: (c_x*32+rand.nextInt(p1-p2))*16+8,
+          y: (c_y*32+rand.nextInt(p1-p2))*16+8
+        }
+        if @biomeAt(coords)?.name in ['Plains', 'Desert', 'Savanna']
+          (features.Villages ||= []).push(coords)
+        temple_seed = seed.add(14357617)
+        rand = new JavaRand(temple_seed)
+        coords = {
+          x: (c_x*32+rand.nextInt(p1-p2))*16+8,
+          y: (c_y*32+rand.nextInt(p1-p2))*16+8
+        }
+        biome = @biomeAt(coords)?.name
+        if biome in ['Swampland']
+          (features['Witch Huts'] ||= []).push(coords)
+        else if biome in ['Jungle', 'Jungle Hills']
+          (features['Jungle Temples'] ||= []).push(coords)
+        else if biome in ['Desert', 'Desert Hills']
+          (features['Desert Temples'] ||= []).push(coords)
+
+    for name, markers of @markers
+      markers.clearLayers()
+      if features[name]
+        for coords in features[name]
+          L.marker(@map_coords(coords)).addTo(@markers[name])
