@@ -3,49 +3,6 @@ class window.BiomeTileLayer
     @layer = L.canvasTileLayer(options)
     @layer._drawCanvasTile = @_drawCanvasTile
     @cache = new Cache(@tileProvider, 75)
-
-  _drawCanvasTile: (canvas, done) =>
-    ctx = canvas.getContext('2d');
-    canvas.width = 512
-    canvas.height = 512
-    c_x = canvas.coords.x
-    c_y = canvas.coords.y
-    @cache.get({c_x:c_x, c_y:c_y},
-    ([biomes, pixels]) =>
-      imageData = ctx.createImageData(canvas.width, canvas.height)
-      data = imageData.data
-      if (data.set)
-        data.set(pixels)
-      else
-        index = data.length - 1
-        (data[index] = pixels[index]) while (index--)
-      ctx.putImageData(imageData, 0, 0);
-      done(false, canvas)
-    )
-
-  request: (url, success, failure) ->
-    xhr = new XMLHttpRequest()
-    xhr.open('GET', url, true)
-    xhr.responseType = 'arraybuffer'
-    xhr.onreadystatechange = () ->
-      if this.readyState == this.DONE
-        if this.status == 200 && this.response != null
-          success(new Uint8Array(this.response))
-        else
-          failure()
-    xhr.send()
-
-  tileProvider: (params, callback) =>
-    @request("http://localhost:8000/data?seed=#{@seed.toString()}&type=Default&x=#{params.c_x}&y=#{params.c_y}",
-    ((biome_data) =>
-      data = {biome_data:biome_data.buffer, c_x:params.c_x, c_y:params.c_y}
-      @workers.calc_pixels(data, [data.biome_data]).then (ret_data) ->
-        callback([new Uint8Array(ret_data.biomes), new Uint8ClampedArray(ret_data.pixels)])),
-    (() ->
-      console.log "error")
-    )
-
-
     @worker_funcs = {
       init: () ->
         importScripts('scripts/seedrandom.js')
@@ -143,3 +100,45 @@ class window.BiomeTileLayer
         callback({pixels:pixels, biomes:b_data}, [pixels.buffer, b_data.buffer])
     }
     @workers = cw(@worker_funcs, 4)
+
+
+  _drawCanvasTile: (canvas, done) =>
+    ctx = canvas.getContext('2d');
+    canvas.width = 512
+    canvas.height = 512
+    c_x = canvas.coords.x
+    c_y = canvas.coords.y
+    @cache.get({c_x:c_x, c_y:c_y},
+    ([biomes, pixels]) =>
+      imageData = ctx.createImageData(canvas.width, canvas.height)
+      data = imageData.data
+      if (data.set)
+        data.set(pixels)
+      else
+        index = data.length - 1
+        (data[index] = pixels[index]) while (index--)
+      ctx.putImageData(imageData, 0, 0);
+      done(false, canvas)
+    )
+
+  request: (url, success, failure) ->
+    xhr = new XMLHttpRequest()
+    xhr.open('GET', url, true)
+    xhr.responseType = 'arraybuffer'
+    xhr.onreadystatechange = () ->
+      if this.readyState == this.DONE
+        if this.status == 200 && this.response != null
+          success(new Uint8Array(this.response))
+        else
+          failure()
+    xhr.send()
+
+  tileProvider: (params, callback) =>
+    @request("http://localhost:8000/data?seed=#{@seed.toString()}&type=Default&x=#{params.c_x}&y=#{params.c_y}",
+    ((biome_data) =>
+      data = {biome_data:biome_data.buffer, c_x:params.c_x, c_y:params.c_y}
+      @workers.calc_pixels(data, [data.biome_data]).then (ret_data) ->
+        callback([new Uint8Array(ret_data.biomes), new Uint8ClampedArray(ret_data.pixels)])),
+    (() ->
+      console.log "error")
+    )
