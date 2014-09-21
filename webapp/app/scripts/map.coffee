@@ -12,6 +12,7 @@ class window.MineMap
     @markers['Jungle Temples'] = L.layerGroup();
     @markers['Desert Temples'] = L.layerGroup();
     @markers['Witch Huts'] = L.layerGroup();
+    @markers['Ocean Monuments'] = L.layerGroup();
 
     for name, layer of @markers
       @map.addLayer(layer)
@@ -56,13 +57,13 @@ class window.MineMap
     bounds = @map.getBounds()
     top_left = @mc_coords(bounds.getNorthWest())
     bottom_right = @mc_coords(bounds.getSouthEast())
-    p1 = 32
-    p2 = 8
+    spacing = 32
+    separation = 8
     feature_chunk = {
-      top: Math.floor(top_left.y / 16 / p1),
-      left: Math.floor(top_left.x / 16 / p1),
-      bottom: Math.ceil(bottom_right.y / 16 / p1),
-      right: Math.ceil(bottom_right.x / 16 / p1),
+      top: Math.floor(top_left.y / 16 / spacing),
+      left: Math.floor(top_left.x / 16 / spacing),
+      bottom: Math.ceil(bottom_right.y / 16 / spacing),
+      right: Math.ceil(bottom_right.x / 16 / spacing),
     }
     for c_y in [feature_chunk.top..feature_chunk.bottom]
       for c_x in [feature_chunk.left..feature_chunk.right]
@@ -72,16 +73,16 @@ class window.MineMap
         village_seed = seed.add(10387312)
         rand = new JavaRand(village_seed)
         coords = {
-          x: (c_x*32+rand.nextInt(p1-p2))*16+8,
-          y: (c_y*32+rand.nextInt(p1-p2))*16+8
+          x: (c_x*32+rand.nextInt(spacing-separation))*16+8,
+          y: (c_y*32+rand.nextInt(spacing-separation))*16+8
         }
         if @biomeAt(coords)?.name in ['Plains', 'Desert', 'Savanna']
           (features.Villages ||= []).push(coords)
         temple_seed = seed.add(14357617)
         rand = new JavaRand(temple_seed)
         coords = {
-          x: (c_x*32+rand.nextInt(p1-p2))*16+8,
-          y: (c_y*32+rand.nextInt(p1-p2))*16+8
+          x: (c_x*32+rand.nextInt(spacing-separation))*16+8,
+          y: (c_y*32+rand.nextInt(spacing-separation))*16+8
         }
         biome = @biomeAt(coords)?.name
         if biome in ['Swampland']
@@ -90,7 +91,16 @@ class window.MineMap
           (features['Jungle Temples'] ||= []).push(coords)
         else if biome in ['Desert', 'Desert Hills']
           (features['Desert Temples'] ||= []).push(coords)
-
+        monument_seed = seed.add(10387313)
+        separation = 5
+        rand = new JavaRand(monument_seed)
+        coords = {
+          x: (c_x*32+(~~((rand.nextInt(spacing-separation)+rand.nextInt(spacing-separation)) / 2)))*16+8,
+          y: (c_y*32+(~~((rand.nextInt(spacing-separation)+rand.nextInt(spacing-separation)) / 2)))*16+8
+        }
+        biome = @biomeAt(coords)?.name
+        if biome in ['Deep Ocean']
+          (features['Ocean Monuments'] ||= []).push(coords)
     for name, markers of @markers
       markers.clearLayers()
       if features[name]

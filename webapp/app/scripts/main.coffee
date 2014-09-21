@@ -13,4 +13,4 @@ map_info_view = new MapInfoView
   model: map_state
   el: '.mapinfo'
 
-map_state.set({seed:2020887652})
+#map_state.set({seed:2020887652})
