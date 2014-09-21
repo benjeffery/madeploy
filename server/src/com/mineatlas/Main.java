@@ -72,7 +72,7 @@ public class Main implements Container {
 
     public static void main(String[] args) throws Exception {
         Util.setMinecraftDirectory();
-        MinecraftVersion version = MinecraftVersion.fromVersionPath(new File("/home/benj/.minecraft/versions/1.7.2/"));
+        MinecraftVersion version = MinecraftVersion.fromVersionPath(new File(args[1]));
         IMinecraftInterface minecraft = new Minecraft(version.getJarFile()).createInterface();
         MinecraftUtil.setBiomeInterface(minecraft);
 
