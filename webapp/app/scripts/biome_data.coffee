@@ -51,7 +51,7 @@ biome_data = [
   ["Mega Taiga Hills", 33, [69, 79, 62]],
   ["Taiga M", 133, [11, 102, 89]],
   ["Mega Spruce Taiga", 160, [89, 102, 81]],
-  ["Mega Spruce Taiga (Hills)", 161, [69, 79, 62]],
+  ["Redwood Taiga Hills M", 161, [69, 79, 62]],
 
   ["Swampland", 6, [7, 249, 178]],
   ["Swampland M", 134, [7, 249, 178]],

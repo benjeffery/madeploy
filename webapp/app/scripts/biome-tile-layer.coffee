@@ -102,7 +102,6 @@ class window.BiomeTileLayer
     }
     @workers = cw(@worker_funcs, 4)
 
-
   _drawCanvasTile: (canvas, done) =>
     ctx = canvas.getContext('2d');
     canvas.width = 512
@@ -110,18 +109,18 @@ class window.BiomeTileLayer
     c_x = canvas.coords.x
     c_y = canvas.coords.y
     @cache.get({c_x:c_x, c_y:c_y},
-    ([biomes, pixels]) =>
-      imageData = ctx.createImageData(canvas.width, canvas.height)
-      data = imageData.data
-      if (data.set)
-        data.set(pixels)
-      else
-        index = data.length - 1
-        (data[index] = pixels[index]) while (index--)
-      ctx.putImageData(imageData, 0, 0);
-      done(false, canvas)
-      if (@update_callback)
-        @update_callback()
+      ([biomes, pixels]) =>
+        imageData = ctx.createImageData(canvas.width, canvas.height)
+        data = imageData.data
+        if (data.set)
+          data.set(pixels)
+        else
+          index = data.length - 1
+          (data[index] = pixels[index]) while (index--)
+        ctx.putImageData(imageData, 0, 0);
+        done(false, canvas)
+        if (@update_callback)
+          @update_callback()
     )
 
   request: (url, success, failure) ->

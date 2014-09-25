@@ -42,7 +42,7 @@ class window.MapView extends Backbone.View
 
 
   setSeedFromText: () =>
-    @model.set seed: @$('.seed-input > input').val()
+    @model.set seed: Long.fromString(@$('.seed-input > input').val())
 
   setFile: (evt) =>
     @levelFile = evt.target.files[0]
