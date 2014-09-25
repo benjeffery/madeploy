@@ -1,60 +1,68 @@
-sand_col = [181, 144, 66]
+sand_col = [191, 183, 85]
 ice_col = [210,220,255]
 blue_ice_col = [180,190,255]
 mesa_floor_col = [167, 87, 35]
 mesa_top_col = [147, 90, 64]
 sea_col = [10,51,130]
 deep_sea_col = [10,51,80]
-savanna_col = [189, 218, 95]
+savanna_col = [134, 154, 63]
 mushroom_col = [201, 152, 119]
 jungle_col = [83, 123, 9]
+plains_col = [145,189,89]
+taiga_col = [100,136,118]
+cold_taiga_col = [145,194,170]
+mega_taiga_col = [73, 93, 81]
+ex_col = [94, 94, 94]
+swamp_col = [53, 60, 44]
+forest_col = [5, 102, 33]
+birch_col = [48, 116, 68]
 biome_data = [
   ["Ocean", 0, sea_col],#[0, 0, 112]],
   ["Deep Ocean", 24, deep_sea_col], #[0, 0, 48]],
   ["Frozen Ocean", 10, blue_ice_col],#[144, 144, 160]],
   ["River", 7, sea_col],
   ["Frozen River", 11, blue_ice_col],#[160, 160, 255]],
-  ["Beach", 16, [250, 222, 85]],
+  ["Beach", 16, sand_col],
   ["Stone Beach", 25, [162, 162, 132]],
   ["Cold Beach", 26, ice_col],
 
 
-  ["Plains", 1, [141, 179, 96]],
-  ["Sunflower Plains", 129, [141, 179, 96]],
+  ["Plains", 1, plains_col],
+  ["Sunflower Plains", 129, plains_col],
 
   ["Desert", 2, sand_col],
   ["Desert Hills", 17, sand_col],#[210, 95, 18]],
   ["Desert M", 130, sand_col], #water patches
 
-  ["Extreme Hills", 3, [96, 96, 96]],
-  ["Extreme Hills Edge", 20, [114, 120, 154]],
-  ["Extreme Hills M", 131, [96, 96, 96]],
-  ["Extreme Hills+", 34, [80, 112, 80]],
-  ["Extreme Hills+ M", 162, [80, 112, 80]],
+  ["Extreme Hills", 3, ex_col],
+  ["Extreme Hills Edge", 20, ex_col],
+  ["Extreme Hills M", 131, ex_col],
+  ["Extreme Hills+", 34, ex_col]
+  ["Extreme Hills+ M", 162, ex_col],
 
-  ["Forest", 4, [5, 102, 33]],
-  ["Forest Hills", 18, [34, 85, 28]],
-  ["Birch Forest", 27, [48, 116, 68]],
-  ["Birch Forest Hills", 28, [31, 95, 50]],
-  ["Birch Forest M", 155, [48, 116, 68]],
-  ["Birch Forest Hills M", 156, [31, 95, 50]],
+  ["Forest", 4, forest_col],
+  ["Forest Hills", 18, forest_col],
+  ["Birch Forest", 27, birch_col],
+  ["Birch Forest Hills", 28, birch_col],
+  ["Birch Forest M", 155, birch_col],
+  ["Birch Forest Hills M", 156, birch_col],
   ["Roofed Forest", 29, [64, 81, 26]],
   ["Roofed Forest M", 157, [64, 81, 26]],
-  ["Flower Forest", 132, [5, 102, 33]],
+  ["Flower Forest", 132, forest_col],
 
-  ["Taiga", 5, [11, 102, 89]],
-  ["Taiga Hills", 19, [22, 57, 51]],
-  ["Cold Taiga", 30, [49, 85, 74]],
-  ["Cold Taiga M", 158, [49, 85, 74]]
-  ["Cold Taiga Hills", 31, [36, 63, 54]],
-  ["Mega Taiga", 32, [89, 102, 81]],
-  ["Mega Taiga Hills", 33, [69, 79, 62]],
-  ["Taiga M", 133, [11, 102, 89]],
-  ["Mega Spruce Taiga", 160, [89, 102, 81]],
-  ["Redwood Taiga Hills M", 161, [69, 79, 62]],
+  ["Taiga", 5, taiga_col],
+  ["Taiga Hills", 19, taiga_col],
+  ["Cold Taiga", 30, cold_taiga_col],
+  ["Cold Taiga M", 158, cold_taiga_col]
+  ["Cold Taiga Hills", 31, cold_taiga_col],
+  ["Mega Taiga", 32, mega_taiga_col],
+  ["Mega Taiga Hills", 33, mega_taiga_col],
+  ["Taiga M", 133, taiga_col],
+  ["Mega Spruce Taiga", 160, mega_taiga_col],
+  ["Redwood Taiga Hills M", 161, mega_taiga_col],
 
-  ["Swampland", 6, [7, 249, 178]],
-  ["Swampland M", 134, [7, 249, 178]],
+  ["Swampland", 6, swamp_col],
+  ["Swampland M", 134, swamp_col],
 
   ["Ice Plains", 12, ice_col],
   ["Ice Plains Spikes", 140, ice_col, 'spikes'],
