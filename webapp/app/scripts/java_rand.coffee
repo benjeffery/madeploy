@@ -1,3 +1,11 @@
+#String.prototype.hashCode = function() {
+            #var e = 0;
+            #if (0 == this.length) return e;
+            #for (var t = 0; t < this.length; t++) {
+                #var n = this.charCodeAt(t);
+                #e = (e << 5) - e + n, e &= e
+            #}
+            #return e
 multiplier = Long.fromString('5DEECE66D', false, 16)
 addend = Long.fromString('B', false, 16)
 mask = Long.fromInt(1).shiftLeft(48).subtract(1)
