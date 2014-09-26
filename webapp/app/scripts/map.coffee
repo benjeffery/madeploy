@@ -9,15 +9,22 @@ class window.MineMap
     @biomeTiles.layer.on('tileunload', @tileUnload)
     @biomeTiles.layer.on('tileload', @tileLoad)
     @markers = {}
-    @markers.Villages = L.layerGroup();
-    @markers['Jungle Temples'] = L.layerGroup();
-    @markers['Desert Temples'] = L.layerGroup();
-    @markers['Witch Huts'] = L.layerGroup();
-    @markers['Ocean Monuments'] = L.layerGroup();
     @feature_makers = {}
-    for name, markers of @markers
-      @feature_makers[name] = (coords) =>
-        L.marker(@map_coords(coords))
+    @markers.Villages = L.layerGroup();
+    @feature_makers.Villages = (coords) =>
+      L.marker(@map_coords(coords), {icon:L.icon({iconUrl:'markers/village.png'}), opacity:0.75, riseOnHover:true})
+    @markers['Jungle Temples'] = L.layerGroup();
+    @feature_makers['Jungle Temples'] = (coords) =>
+      L.marker(@map_coords(coords), {icon:L.icon({iconUrl:'markers/chest.png'}), opacity:0.75, riseOnHover:true})
+    @markers['Desert Temples'] = L.layerGroup();
+    @feature_makers['Desert Temples'] = (coords) =>
+      L.marker(@map_coords(coords), {icon:L.icon({iconUrl:'markers/chest.png'}), opacity:0.75, riseOnHover:true})
+    @markers['Witch Huts'] = L.layerGroup();
+    @feature_makers['Witch Huts'] = (coords) =>
+      L.marker(@map_coords(coords), {icon:L.icon({iconUrl:'markers/witch.png'}), opacity:0.75, riseOnHover:true})
+    @markers['Ocean Monuments'] = L.layerGroup();
+    @feature_makers['Ocean Monuments'] = (coords) =>
+      L.marker(@map_coords(coords), {icon:L.icon({iconUrl:'markers/ocean.png'}), opacity:0.75, riseOnHover:true})
 
     @markers['Slime Chunks'] = L.layerGroup();
     @feature_makers['Slime Chunks'] = (coords) =>
@@ -62,12 +69,12 @@ class window.MineMap
     tile = tile.tile
     feature_layers = {}
     features = @calcFeatures(tile.coords)
-    for name, coords of features
+    for feature_name, coords of features
       layer = L.layerGroup()
       for coord in coords
-        @feature_makers[name](coord).addTo(layer)
-      feature_layers[name] = layer
-      layer.addTo(@markers[name])
+        @feature_makers[feature_name](coord).addTo(layer)
+      feature_layers[feature_name] = layer
+      layer.addTo(@markers[feature_name])
     tile.feature_layers = feature_layers
 
   tileUnload: (tile) =>
