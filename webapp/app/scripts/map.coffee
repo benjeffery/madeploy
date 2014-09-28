@@ -8,28 +8,39 @@ class window.MineMap
     @biomeTiles.layer.addTo(@map)
     @biomeTiles.layer.on('tileunload', @tileUnload)
     @biomeTiles.layer.on('tileload', @tileLoad)
+    m_opts = {
+      shadowUrl: 'markers/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [-3, -76],
+      shadowSize: [41, 41],
+      shadowAnchor: [13, 41]
+    }
     @markers = {}
     @feature_makers = {}
+    @markers.Player = L.layerGroup();
+    @feature_makers.Player = (coords) =>
+      L.marker(@map_coords(coords), {icon:L.icon(_.extend({iconUrl:'markers/player.png'}, m_opts)), opacity:0.75, riseOnHover:true})
     @markers.Villages = L.layerGroup();
     @feature_makers.Villages = (coords) =>
-      L.marker(@map_coords(coords), {icon:L.icon({iconUrl:'markers/village.png'}), opacity:0.75, riseOnHover:true})
+      L.marker(@map_coords(coords), {icon:L.icon(_.extend({iconUrl:'markers/village.png'}, m_opts)), opacity:0.75, riseOnHover:true})
     @markers['Jungle Temples'] = L.layerGroup();
     @feature_makers['Jungle Temples'] = (coords) =>
-      L.marker(@map_coords(coords), {icon:L.icon({iconUrl:'markers/chest.png'}), opacity:0.75, riseOnHover:true})
+      L.marker(@map_coords(coords), {icon:L.icon(_.extend({iconUrl:'markers/chest.png'}, m_opts)), opacity:0.75, riseOnHover:true})
     @markers['Desert Temples'] = L.layerGroup();
     @feature_makers['Desert Temples'] = (coords) =>
-      L.marker(@map_coords(coords), {icon:L.icon({iconUrl:'markers/chest.png'}), opacity:0.75, riseOnHover:true})
+      L.marker(@map_coords(coords), {icon:L.icon(_.extend({iconUrl:'markers/chest.png'}, m_opts)), opacity:0.75, riseOnHover:true})
     @markers['Witch Huts'] = L.layerGroup();
     @feature_makers['Witch Huts'] = (coords) =>
-      L.marker(@map_coords(coords), {icon:L.icon({iconUrl:'markers/witch.png'}), opacity:0.75, riseOnHover:true})
+      L.marker(@map_coords(coords), {icon:L.icon(_.extend({iconUrl:'markers/witch.png'}, m_opts)), opacity:0.75, riseOnHover:true})
     @markers['Ocean Monuments'] = L.layerGroup();
     @feature_makers['Ocean Monuments'] = (coords) =>
-      L.marker(@map_coords(coords), {icon:L.icon({iconUrl:'markers/ocean.png'}), opacity:0.75, riseOnHover:true})
+      L.marker(@map_coords(coords), {icon:L.icon(_.extend({iconUrl:'markers/ocean.png'}, m_opts)), opacity:0.75, riseOnHover:true})
 
     @markers['Slime Chunks'] = L.layerGroup();
     @feature_makers['Slime Chunks'] = (coords) =>
       L.rectangle([@map_coords(coords), @map_coords({x:coords.x+16, y:coords.y+16})],
-        {color: "#00FF00", weight: 1, clickable:false});
+        {color: "#00FF00", weight: 1, clickable:false, opacity:0.3});
     for name, layer of @markers
       @map.addLayer(layer)
     L.control.layers({}, @markers, {collapsed:false}).addTo(@map);
@@ -61,7 +72,7 @@ class window.MineMap
     return window.biome_map[biomes[x + 3 + (y + 3) * 518]]
 
   setPlayer: (pos, dir) =>
-    @player_marker ?= (L.marker(@map_coords({x: 0, y: 0})).addTo(@map))
+    @player_marker ?= @feature_makers.Player(pos).addTo(@map)
     @player_marker.setLatLng(@map_coords(pos))
     @map.panTo(@map_coords(pos))
 

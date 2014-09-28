@@ -82,9 +82,9 @@ class window.BiomeTileLayer
             biome = biome_map[b_data[x + 3 + (y + 3) * 518]]
             c = biome.colour
             diff = diffuse[p]
-            pixels[4 * p] = c[0] * Math.min(1, diff * 0.6 + 0.4)
-            pixels[4 * p + 1] = c[1] * Math.min(1, diff * 0.6 + 0.4)
-            pixels[4 * p + 2] = c[2] * Math.min(1, diff * 0.6 + 0.4)
+            pixels[4 * p] = c[0] * Math.min(1, diff * 0.5 + 0.5)
+            pixels[4 * p + 1] = c[1] * Math.min(1, diff * 0.5 + 0.5)
+            pixels[4 * p + 2] = c[2] * Math.min(1, diff * 0.5 + 0.5)
             pixels[4 * p + 3] = 255
         console.timeEnd('w')
         seen = new Uint8Array(518*518)
