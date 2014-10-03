@@ -101,14 +101,14 @@ class window.MineMap
     feature_chunk = {
       top: Math.floor(top_left.y / (16*spacing)),
       left: Math.floor(top_left.x / (16*spacing)),
-      bottom: Math.floor(bottom_right.y / (16*spacing)),
-      right: Math.floor(bottom_right.x / (16*spacing)),
+      bottom: Math.floor(bottom_right.y / (16*spacing))-1,
+      right: Math.floor(bottom_right.x / (16*spacing))-1,
     }
     for c_y in [feature_chunk.top..feature_chunk.bottom]
       for c_x in [feature_chunk.left..feature_chunk.right]
         separation = 8 #For all except monument
-        seed = Long.fromInt(c_x).multiply(341873128712)
-          .add(Long.fromInt(c_y).multiply(132897987541))
+        seed = Long.fromNumber(c_x).multiply(341873128712)
+          .add(Long.fromNumber(c_y).multiply(132897987541))
           .add(@seed)
         village_seed = seed.add(10387312)
         rand = new JavaRand(village_seed)
@@ -144,15 +144,18 @@ class window.MineMap
     chunk = {
       top: Math.floor(top_left.y / 16),
       left: Math.floor(top_left.x / 16),
-      bottom: Math.floor(bottom_right.y / 16),
-      right: Math.floor(bottom_right.x / 16),
+      bottom: Math.floor(bottom_right.y / 16)-1,
+      right: Math.floor(bottom_right.x / 16)-1,
     }
     console.time('Slime')
     for c_y in [chunk.top..chunk.bottom]
       for c_x in [chunk.left..chunk.right]
-        slime_seed = @seed.add(c_x*c_x*4987142+c_x*5947611+c_y*c_y*4392871+c_y*389711)
-        window.glob = @seed
-        slime_seed = slime_seed.xor(987234911)
+        l_c_x = Long.fromNumber(c_x)
+        l_c_y = Long.fromNumber(c_y)
+        slime_seed = @seed.add(l_c_x.multiply(l_c_x).multiply(4987142).getLowBits())
+        slime_seed = slime_seed.add(l_c_x.multiply(5947611).getLowBits())
+        slime_seed = slime_seed.add(Long.fromInt(l_c_y.multiply(l_c_y).getLowBits()).multiply(4392871))
+        slime_seed = slime_seed.add(l_c_y.multiply(389711).getLowBits())
         rand = new JavaRand(slime_seed)
         if rand.nextInt(10) == 0
           coords = {
