@@ -148,14 +148,19 @@ class window.MineMap
       right: Math.floor(bottom_right.x / 16)-1,
     }
     console.time('Slime')
+    x_sum = []
+    for c_x in [chunk.left..chunk.right]
+      l_c_x = Long.fromNumber(c_x)
+      l_c_x_m_2_l = Long.fromInt(l_c_x.multiply(l_c_x).multiply(4987142).getLowBits())
+      l_c_x_m_l = l_c_x.multiply(5947611).getLowBits()
+      x_sum[c_x-chunk.left] = l_c_x_m_2_l.add(l_c_x_m_l)
     for c_y in [chunk.top..chunk.bottom]
+      l_c_y = Long.fromNumber(c_y)
+      l_c_y_2_l_m = Long.fromInt(l_c_y.multiply(l_c_y).getLowBits()).multiply(4392871)
+      l_c_y_m = l_c_y.multiply(389711).getLowBits()
+      y_sum = l_c_y_2_l_m.add(l_c_y_m)
       for c_x in [chunk.left..chunk.right]
-        l_c_x = Long.fromNumber(c_x)
-        l_c_y = Long.fromNumber(c_y)
-        slime_seed = @seed.add(l_c_x.multiply(l_c_x).multiply(4987142).getLowBits())
-        slime_seed = slime_seed.add(l_c_x.multiply(5947611).getLowBits())
-        slime_seed = slime_seed.add(Long.fromInt(l_c_y.multiply(l_c_y).getLowBits()).multiply(4392871))
-        slime_seed = slime_seed.add(l_c_y.multiply(389711).getLowBits())
+        slime_seed = @seed.add(x_sum[c_x-chunk.left]).add(y_sum).xor(987234911)
         rand = new JavaRand(slime_seed)
         if rand.nextInt(10) == 0
           coords = {
