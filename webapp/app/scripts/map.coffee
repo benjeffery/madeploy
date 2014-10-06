@@ -55,7 +55,7 @@ class window.MineMap
     return pos
 
   tileCoords: (mc_coords) =>
-    return {c_x:Math.floor(mc_coords.x / (4*512)), c_y:Math.floor(mc_coords.y / (4*512))}
+    return {c_x:mc_coords.x >> 11, c_y:mc_coords.y >> 11} #11 = x/4*512
 
   mcCoordsFromTile: (tile_coords) ->
     return {x: tile_coords.x * (4*512), y: tile_coords.y * (4*512)}
@@ -63,8 +63,19 @@ class window.MineMap
   biomeAt: (mc_coords) =>
     tc = @tileCoords(mc_coords)
     data = @biomeTiles.cache.get(tc)
-    x = Math.floor(mc_coords.x/4) - (tc.c_x * 512)
-    y = Math.floor(mc_coords.y/4) - (tc.c_y * 512)
+    x = (mc_coords.x >> 2) - (tc.c_x * 512)
+    y = (mc_coords.y >> 2) - (tc.c_y * 512)
+    if (data)
+      [biomes, pixels] = data
+    else
+      return null
+    return window.biome_map[biomes[x + 3 + (y + 3) * 518]]
+
+  biomeAtBiomeCoords: (x,y) =>
+    tc = {c_x:x >> 9, c_y:y >> 9}
+    data = @biomeTiles.cache.get(tc)
+    x = x - (tc.c_x * 512)
+    y = y - (tc.c_y * 512)
     if (data)
       [biomes, pixels] = data
     else
@@ -93,7 +104,21 @@ class window.MineMap
     for name, layer of tile.feature_layers
       @markers[name].removeLayer(layer)
 
-#  check_biome_region: (x, y, radius, attribute) ->
+  checkBiomeRegion: (mc_coords, radius, attribute) ->
+    left = mc_coords.x - radius >> 2;
+    bottom = mc_coords.y - radius >> 2;
+    right = mc_coords.x + radius >> 2;
+    top = mc_coords.y + radius >> 2;
+    for x in [left..right]
+      for y in [top..bottom]
+        biome = @biomeAtBiomeCoords(x,y)
+        if biome
+          if !biome[attribute]
+            return false
+        else
+          return false
+    return true
+
 
   calcFeatures: (tile_coord) =>
     console.time('Feature')
@@ -141,13 +166,13 @@ class window.MineMap
           x: (c_x*32+(~~((rand.nextInt(spacing-separation)+rand.nextInt(spacing-separation)) / 2)))*16+8,
           y: (c_y*32+(~~((rand.nextInt(spacing-separation)+rand.nextInt(spacing-separation)) / 2)))*16+8
         }
-        if @biomeAt(coords).monument
+        if @biomeAt(coords).monument && @checkBiomeRegion(coords, 29, 'aquatic')
           (features['Ocean Monuments'] ||= []).push(coords)
     chunk = {
-      top: Math.floor(top_left.y / 16),
-      left: Math.floor(top_left.x / 16),
-      bottom: Math.floor(bottom_right.y / 16)-1,
-      right: Math.floor(bottom_right.x / 16)-1,
+      top: top_left.y >> 4,
+      left: top_left.x >> 4,
+      bottom: (bottom_right.y >> 4)-1,
+      right: (bottom_right.x >> 4)-1,
     }
     x_sum = []
     for c_x in [chunk.left..chunk.right]
