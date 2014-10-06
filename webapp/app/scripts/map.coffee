@@ -93,7 +93,10 @@ class window.MineMap
     for name, layer of tile.feature_layers
       @markers[name].removeLayer(layer)
 
+#  check_biome_region: (x, y, radius, attribute) ->
+
   calcFeatures: (tile_coord) =>
+    console.time('Feature')
     features = {}
     spacing = 32 #Currently 32 for all features
     top_left = @mcCoordsFromTile(tile_coord)
@@ -116,7 +119,7 @@ class window.MineMap
           x: (c_x*32+rand.nextInt(spacing-separation))*16+8,
           y: (c_y*32+rand.nextInt(spacing-separation))*16+8
         }
-        if @biomeAt(coords)?.name in ['Plains', 'Desert', 'Savanna']
+        if @biomeAt(coords).village
           (features.Villages ||= []).push(coords)
         temple_seed = seed.add(14357617)
         rand = new JavaRand(temple_seed)
@@ -124,12 +127,12 @@ class window.MineMap
           x: (c_x*32+rand.nextInt(spacing-separation))*16+8,
           y: (c_y*32+rand.nextInt(spacing-separation))*16+8
         }
-        biome = @biomeAt(coords)?.name
-        if biome in ['Swampland']
+        biome = @biomeAt(coords)
+        if biome.witch_hut
           (features['Witch Huts'] ||= []).push(coords)
-        else if biome in ['Jungle', 'Jungle Hills']
+        else if biome.jungle_temple
           (features['Jungle Temples'] ||= []).push(coords)
-        else if biome in ['Desert', 'Desert Hills']
+        else if biome.desert_temple
           (features['Desert Temples'] ||= []).push(coords)
         monument_seed = seed.add(10387313)
         separation = 5
@@ -138,8 +141,7 @@ class window.MineMap
           x: (c_x*32+(~~((rand.nextInt(spacing-separation)+rand.nextInt(spacing-separation)) / 2)))*16+8,
           y: (c_y*32+(~~((rand.nextInt(spacing-separation)+rand.nextInt(spacing-separation)) / 2)))*16+8
         }
-        biome = @biomeAt(coords)?.name
-        if biome in ['Deep Ocean']
+        if @biomeAt(coords).monument
           (features['Ocean Monuments'] ||= []).push(coords)
     chunk = {
       top: Math.floor(top_left.y / 16),
@@ -147,7 +149,6 @@ class window.MineMap
       bottom: Math.floor(bottom_right.y / 16)-1,
       right: Math.floor(bottom_right.x / 16)-1,
     }
-    console.time('Slime')
     x_sum = []
     for c_x in [chunk.left..chunk.right]
       l_c_x = Long.fromNumber(c_x)
@@ -168,5 +169,5 @@ class window.MineMap
             y: c_y * 16
           }
           (features['Slime Chunks'] ||= []).push(coords)
-    console.timeEnd('Slime')
+    console.timeEnd('Feature')
     return features

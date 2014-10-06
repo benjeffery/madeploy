@@ -153,10 +153,33 @@ heights = [
 ]
 self.biome_map = {}
 for biome in biome_data
-  self.biome_map[biome[1]] = {'name': biome[0], 'colour': biome[2], 'decorator':biome[3]}
+  self.biome_map[biome[1]] = {
+    name: biome[0],
+    colour: biome[2],
+    decorator:biome[3],
+    aquatic:false,
+    monument:false,
+    village:false,
+    witch_hut:false,
+    jungle_temple:false,
+    desert_temple:false,
+    }
+self.biome_name_map = {}
+for num, biome of self.biome_map
+  self.biome_name_map[biome.name] = biome
 for height in heights
   self.biome_map[height[0]].offset = height[1]
   self.biome_map[height[0]].scale = 40*(height[2])# * 0.9 + 0.1)
+for name in ['Ocean', 'Deep Ocean', 'Frozen Ocean', 'River', 'Frozen River']
+  self.biome_name_map[name].aquatic = true
+for name in ['Plains', 'Desert', 'Savanna']
+  self.biome_name_map[name].village = true
+for name in ['Jungle', 'Jungle Hills']
+  self.biome_name_map[name].jungle_temple = true
+for name in ['Desert', 'Desert Hills']
+  self.biome_name_map[name].jungle_temple = true
+self.biome_name_map['Deep Ocean'].monument = true
+self.biome_name_map['Swampland'].witch_hut = true
 
 self.images = {
   spruce: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAABAAAAAQBPJcTWAAAAHnRFWHRUaXRsZQBFVkVSR1JFRU4gVFJFRSAoVSsxRjMzMik3n+5wAAAAFXRFWHRBdXRob3IAQW5kcmV3IE1hcmN1c2XnNzeDAAAAL3RFWHRTb2Z0d2FyZQBpbmZvLmZpbGVmb3JtYXQuZGF0YS5Vbmljb2RlUG5nU2VydmxldGgBfzAAAABDdEVYdERlc2NyaXB0aW9uAGh0dHA6Ly93d3cuZmlsZWZvcm1hdC5pbmZvL2luZm8vdW5pY29kZS8xZjMzMi9pbmRleC5odG3UGFcIAAAAO3RFWHRDb3B5cmlnaHQAaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbGljZW5zZXMvYnktbmMtc2EvMi4wL2yIkoMAAAQlSURBVHja7ZxbiE1RGMcX4zouw5gLhpFQpiaXESZKuYsXnkxRkktII7nLwxQvLkU8kDy45QEx08SI0SCETK5RJuM2bg8SMcy4jO/rfLtZs87e5+xzm7PK/1f/mrP32nvq/5+911rfWmeUAgAAAAAAAAAQKZNJP2CDPewiNZHSYYUdVEkg02BF8skiNUoge2FH8lknYbA+kTrBkuTRkfRCC4S1ErYkj41GGKwPpO6wpvXpQ/rqEghrH+xpXdqSKj3CYP0lTYJNrcfmEGE4ek/qDasSzxTSLx+BsG6ROsOyxJFP+mKYfod0Vn7+TbponC+VVxyIMwNIrzWj2fxNYvYyOfZdPm8gNWhtD5LawML4MYj0SjOYf56onV+unXP6jWGkau34MVI7WBk7I0lvxVT+q99B6mq0uaAZP187zgGslyeHz5VjjhIb80j1YuZp0mCXNnOMPqPS43VXJudrSMNhbWT0Ih0VAy+Txni0S5fhrTm6KvRoP4v0VAXWTkowAvNHBqmOdN3oJ9w4EWK469WJp5AWkh6oQB0sFZaHp72PNovDzEFW+7gHKsNxYoS8dkIF8pM0ClYlnhzSG58z9ZekTFiWONJI932GgfJJK4RxO8IwHFWQOsDC+I683MLgfqTUOHaI9NmlbZnPwQLwUTZ5ZpjLa+fbSNnSRu/IlfQbB1RwVfgMRlaxMVPMdwytJRWTumhtUg3Ts7VzQ0iHjWBuoqOPHN68sF0FVv7YxLukuTKpM5ltBLLIo3SyWzUv+T4njYbN/hhHeiLGnQ8zW+dSe7URyGOP4JjuMmGsladmKzp7b3KlFNIgr5l8H9es9RhVFYe5joPkouQ1mauskKcSaKxSgdJ6js/2harlIpQuLrfn+bxPAem49DcgSvor9yqvLq7q9oBViacn6ZHPCWEVhrmJhVcKb0Q4Sy/HhDAx8HzjapSlk3N4UuJLN9X8HRC3XYr65z8hXl9psDJ2MmVi6FbH4lFZunGcw1ujmtfidfEqYT9YGj0FMk8wn4AjMm9xcM41ascGkk65hPIOs/ToSidbVPCqYLnHhNE5/81jvlKhglcTl8Dm8PA+qqWq5Q7FJunMx4e4LlQg+tN2VMJw2p9U+KKoJ1zKqFHB+3an+7hWn6GHI0tKLg/lmo8qsLkOW02Fvi6vFF6MmhXBPZzr6iP83bxhbqcKrNHfIxWp/7ymxXODOs3QS6SpUdxHH3lFAz8dE0j75Y/jv2aPCqz+DY3hHm6jLJBE9CExsCiQJnTO9gWCFUDLAukKO+wKJAN22BVILuywK5A82GFXIGNhh12BzIAddgWyAHbYFUgJ7LArkCuww65AWEWwxK5AeFcjdi0mEV5X4e+F8MYG/l8nKbAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABs5B9uiddeB7PCXwAAAABJRU5ErkJggg=="
