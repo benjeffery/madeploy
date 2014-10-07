@@ -177,7 +177,7 @@ for name in ['Plains', 'Desert', 'Savanna']
 for name in ['Jungle', 'Jungle Hills']
   self.biome_name_map[name].jungle_temple = true
 for name in ['Desert', 'Desert Hills']
-  self.biome_name_map[name].jungle_temple = true
+  self.biome_name_map[name].desert_temple = true
 self.biome_name_map['Deep Ocean'].monument = true
 self.biome_name_map['Swampland'].witch_hut = true
 
