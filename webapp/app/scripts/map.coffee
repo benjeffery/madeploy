@@ -2,12 +2,18 @@ class window.MineMap
   constructor: (@el, @seed) ->
     @map = L.map(@el.get(0), {crs: L.CRS.Simple, maxZoom: 18, minZoom: 14})
     @map.setView([0, 0], 16)
+    @map.on 'click', (data) =>
+      c = @mc_coords(data.latlng)
+      console.log('/tp '+c.x+' 100 '+c.y)
 
     @biomeTiles = new BiomeTileLayer({unloadInvisibleTiles:true, updateWhenIdle: true, continuousWorld: true})
     @biomeTiles.seed = @seed
     @biomeTiles.layer.addTo(@map)
     @biomeTiles.layer.on('tileunload', @tileUnload)
     @biomeTiles.layer.on('tileload', @tileLoad)
+
+    @featureCache = new Cache(@featureProvider, 75)
+    @slimeCache = new Cache(@slimeProvider, 75)
     m_opts = {
       shadowUrl: 'markers/marker-shadow.png',
       iconSize: [25, 41],
@@ -89,15 +95,24 @@ class window.MineMap
 
   tileLoad: (tile) =>
     tile = tile.tile
-    feature_layers = {}
-    features = @calcFeatures(tile.coords)
-    for feature_name, coords of features
-      layer = L.layerGroup()
-      for coord in coords
-        @feature_makers[feature_name](coord).addTo(layer)
-      feature_layers[feature_name] = layer
-      layer.addTo(@markers[feature_name])
-    tile.feature_layers = feature_layers
+    async.parallel {
+      slimes: (callback) =>
+        @slimeCache.get(tile.coords, callback)
+      features: (callback) =>
+        @featureCache.get(tile.coords, callback)
+      },
+      (err, results) =>
+        if err
+          return
+        feature_layers = {}
+        results.features['Slime Chunks'] = results.slimes
+        for feature_name, coords of results.features
+          layer = L.layerGroup()
+          for coord in coords
+            @feature_makers[feature_name](coord).addTo(layer)
+          feature_layers[feature_name] = layer
+          layer.addTo(@markers[feature_name])
+        tile.feature_layers = feature_layers
 
   tileUnload: (tile) =>
     tile = tile.tile
@@ -120,7 +135,7 @@ class window.MineMap
     return true
 
 
-  calcFeatures: (tile_coord) =>
+  featureProvider: (tile_coord, fcallback) =>
     console.time('Feature')
     features = {}
     spacing = 32 #Currently 32 for all features
@@ -168,6 +183,14 @@ class window.MineMap
         }
         if @biomeAt(coords).monument && @checkBiomeRegion(coords, 29, 'aquatic')
           (features['Ocean Monuments'] ||= []).push(coords)
+    console.timeEnd('Feature')
+    fcallback(null, features)
+
+  slimeProvider: (tile_coord, callback) =>
+    slimes = []
+    console.time('Slime')
+    top_left = @mcCoordsFromTile(tile_coord)
+    bottom_right = {x:top_left.x+512*4, y:top_left.y+512*4}
     chunk = {
       top: top_left.y >> 4,
       left: top_left.x >> 4,
@@ -193,6 +216,6 @@ class window.MineMap
             x: c_x * 16
             y: c_y * 16
           }
-          (features['Slime Chunks'] ||= []).push(coords)
-    console.timeEnd('Feature')
-    return features
+          slimes.push(coords)
+    console.timeEnd('Slime')
+    callback(null, slimes);

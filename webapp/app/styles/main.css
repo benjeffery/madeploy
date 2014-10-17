@@ -39,7 +39,6 @@ h6,
 
 /* Custom page header */
 .header {
-    border-bottom: 1px solid #e5e5e5;
 }
 
 /* Make the masthead heading the same height as the navigation */
@@ -48,6 +47,9 @@ h6,
     margin-bottom: 0;
     line-height: 40px;
     padding-bottom: 19px;
+}
+.header h1 {
+    text-shadow: 2px 2px 2px olive;
 }
 
 /* Custom page footer */

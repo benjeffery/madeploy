@@ -109,7 +109,7 @@ class window.BiomeTileLayer
     c_x = canvas.coords.x
     c_y = canvas.coords.y
     @cache.get({c_x:c_x, c_y:c_y},
-      ([biomes, pixels]) =>
+      (error, [biomes, pixels]) =>
         imageData = ctx.createImageData(canvas.width, canvas.height)
         data = imageData.data
         if (data.set)
@@ -140,7 +140,9 @@ class window.BiomeTileLayer
     ((biome_data) =>
       data = {biome_data:biome_data.buffer, c_x:params.c_x, c_y:params.c_y}
       @workers.calc_pixels(data, [data.biome_data]).then (ret_data) ->
-        callback([new Uint8Array(ret_data.biomes), new Uint8ClampedArray(ret_data.pixels)])),
+        callback(null, [new Uint8Array(ret_data.biomes), new Uint8ClampedArray(ret_data.pixels)])),
     (() ->
-      console.log "error")
+      console.log "error"
+      callback('error')
+    )
     )
