@@ -54,6 +54,8 @@ public class Main implements Container {
                 response.setValue("Server", "MineData/1.0");
                 response.setValue("Content-Encoding", "gzip");
                 response.setValue("Cache-Control", "public, max-age=200");
+                response.setValue("Access-Control-Allow-Origin", request.getValue("Origin"));
+
 
                 OutputStream out_stream = response.getOutputStream();
                 GZIPOutputStream zos = new GZIPOutputStream(out_stream);
