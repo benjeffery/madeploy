@@ -52,6 +52,7 @@ class window.MapView extends Backbone.View
           seed:result.Data.RandomSeed
           pos:{x:result.Data.Player.Pos[0], y:result.Data.Player.Pos[2]}
           dir:result.Data.Player.Rotation
+          levelName: result.Data.LevelName
         #We have successfully parsed the file so we can update it
         setTimeout(@updateFromFile, 1000)
     reader.readAsBinaryString(@levelFile)

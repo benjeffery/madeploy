@@ -76,6 +76,7 @@
 </div>
 
 <script type="text/template" id="mapinfo-template">
+    <div class="level-name"><%= levelName %></div>
     <div class="seed">Seed:<%= seed.toString() %></div>
     <% if (typeof(mouse) != "undefined") { %>
     <div class="mouse">Pos:<%= Math.round(mouse.x) %>, <%= Math.round(mouse.y) %><br/>
