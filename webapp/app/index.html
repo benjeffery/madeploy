@@ -49,7 +49,6 @@
         <div class="col-md-8 minemap"></div>
         <div class="col-md-4">
             <div class="mapinfo"></div>
-            CONTROLS
         </div>
     </div>
     <div class="row marketing">
@@ -77,15 +76,28 @@
 
 <script type="text/template" id="mapinfo-template">
     <div class="level-name"><%= levelName %></div>
-    <div class="seed">Seed:<%= seed.toString() %></div>
-    <% if (typeof(mouse) != "undefined") { %>
-    <div class="mouse">Pos:<%= Math.round(mouse.x) %>, <%= Math.round(mouse.y) %><br/>
-        Chunk:<%= Math.floor(mouse.x/16) %>, <%= Math.floor(mouse.y/16) %>
-    </div>
-    <% } %>
-    <% if (typeof(mouse_biome) != "undefined" && mouse_biome) { %>
-    <div class="biome">Biome:<%= mouse_biome.name %></div>
-    <% } %>
+    <table class="info">
+        <tr>
+            <td>Seed:</td>
+            <td><%= seed.toString() %></td>
+        </tr>
+        <% if (typeof(mouse) != "undefined") { %>
+        <tr>
+            <td>Coords:</td>
+            <td><%= Math.round(mouse.x) %>, <%= Math.round(mouse.y) %></td>
+        </tr>
+        <tr>
+            <td>Chunk:</td>
+            <td><%= Math.floor(mouse.x/16) %>, <%= Math.floor(mouse.y/16) %></td>
+        </tr>
+        <% } %>
+        <% if (typeof(mouse_biome) != "undefined" && mouse_biome) { %>
+        <tr>
+            <td>Biome:</td>
+            <td><%= mouse_biome.name %></td>
+        </tr>
+        <% } %>
+    </table>
 </script>
 
 <script type="text/template" id="seed-input-template">
