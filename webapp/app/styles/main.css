@@ -31,6 +31,69 @@ h6,
     font-family: 'Asap', sans-serif!important;
 }
 
+.minemap {
+    text-align: center;
+}
+
+.seed-input {
+    padding-top: 50px;
+    display: inline-block;
+}
+.seed-input .input-group {
+    width: 250px;
+}
+
+.seed-input .row {
+    padding-bottom: 20px;
+}
+
+.seed-input .or {
+    font-family: 'Cinzel Decorative', sans-serif !important;
+    text-shadow: 0 1px 0 #fff;
+}
+
+.seed-col {
+    /*height: 430px;*/
+    line-height: 30px;
+    float:left;
+    position: relative;
+}
+
+.seed-row {
+    display: table;
+    margin: 0 auto;
+}
+
+.seed-icon {
+    font-size: 20px;
+    vertical-align: middle;
+    display: inline-block;
+    text-shadow: 0 1px 0 #fff;
+    padding-right: 30px;
+}
+.or {
+    font-size: 20px;
+}
+
+.level-file {
+    position: relative;
+    overflow: hidden;
+}
+.level-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    background: red;
+    cursor: inherit;
+    display: block;
+}
+
 .minemap * {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -68,11 +131,13 @@ h6,
     line-height: 40px;
     padding-bottom: 19px;
 }
-.header h1 {
-    font-family: 'Cinzel Decorative', cursive !important;
+.header h1,h4 {
+    font-family: 'Cinzel Decorative', sans-serif !important;
     text-shadow: 0 1px 0 #fff;
     position: relative;
     z-index: 20;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 /* Custom page footer */

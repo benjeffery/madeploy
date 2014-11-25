@@ -1,11 +1,6 @@
 class window.MapView extends Backbone.View
   initialize: ->
-    @seedInputEl = $("
-      <div class='seed-input'>
-        <input type='text'>
-        <button>Set Seed</button>
-        <input type='file' class='level-file' name='level'/>
-      </div>")
+    @seedInputEl = $($('#seed-input-template').html())
     @$el.append(@seedInputEl)
     @mapEl = $("
       <div class='leaflet-map'></div>")
