@@ -1,15 +1,18 @@
 class window.MapView extends Backbone.View
   initialize: ->
-    @seedInputEl = $($('#seed-input-template').html())
-    @$el.append(@seedInputEl)
+    @$seedInputEl = $($('#seed-input-template').html())
+    @$el.append(@$seedInputEl)
     @mapEl = $("
       <div class='leaflet-map'></div>")
     @$el.append(@mapEl)
     @render()
 
-    $(window).resize () =>
-      @$el.height(Math.min(@$el.width(), $(window).height()*0.80))
-    @$el.height(Math.min(@$el.width(), $(window).height()*0.80))
+    resize = () =>
+      height = Math.min(@$el.width(), Math.max($(window).height()-@$el.position().top-10, @$seedInputEl.height()+30))
+      @$el.height(height)
+      @$seedInputEl.css('padding-top', (height-@$seedInputEl.height())/2)
+    $(window).resize(resize)
+    resize()
 
     @model.on
       'change:seed': @render,
@@ -23,11 +26,11 @@ class window.MapView extends Backbone.View
   render: =>
     seed = @model.get 'seed'
     if seed?
-      @seedInputEl.hide()
+      @$seedInputEl.hide()
       @mapEl.show()
     else
       @mapEl.hide()
-      @seedInputEl.show()
+      @$seedInputEl.show()
     if not @map? and seed?
       @map = new MineMap(@mapEl, seed)
       @map.map.on 'mousemove', (e) =>
