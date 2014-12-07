@@ -29,6 +29,7 @@ class window.MapView extends Backbone.View
       @$seedInputEl.hide()
       @mapEl.show()
     else
+      clearTimeout(@timeoutId) if @timeoutId
       @mapEl.hide()
       @$seedInputEl.show()
     if not @map? and seed?
@@ -38,9 +39,26 @@ class window.MapView extends Backbone.View
         @model.set mouse: mc_coords
         @model.set mouse_biome: @map.biomeAt(mc_coords)
 
+  stringHashCode: (string) ->
+    hash = 0
+    return hash if string.length == 0
+    for i in [0...string.length]
+      char = string.charCodeAt(i);
+      hash = ((hash<<5)-hash)+char;
+      hash = hash & hash  #Convert to 32bit integer
+    return hash
 
   setSeedFromText: () =>
-    @model.set seed: Long.fromString(@$('.seed-input > input').val())
+    val = @$('.seed-in').val()
+    if val.match(/^[-+]?\d+$/)
+      name = Long.fromString(val)
+      seed = Long.fromString(val)
+    else
+      name = val
+      seed = @stringHashCode(val)
+    @model.set
+      levelName: name
+      seed: seed
 
   setFile: (evt) =>
     @levelFile = evt.target.files[0]
@@ -57,9 +75,9 @@ class window.MapView extends Backbone.View
           dir:result.Data.Player.Rotation
           levelName: result.Data.LevelName
         #We have successfully parsed the file so we can update it
-        setTimeout(@updateFromFile, 1000)
+        @timeoutId = setTimeout(@updateFromFile, 1000)
     reader.readAsBinaryString(@levelFile)
 
   events:
-    'click .seed-input > button': 'setSeedFromText'
+    'click .text-seed': 'setSeedFromText'
     'change .level-file': 'setFile'

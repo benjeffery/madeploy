@@ -69,44 +69,46 @@
 </div>
 
 <script type="text/template" id="mapinfo-template">
-    <div class="map-actions">
-        <span class="new-map">
-            <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-remove"></span><span class="btn-label">New Map</span></button>
-        </span>
-    </div>
-    <div class="level-name"><%= levelName %></div>
-    <div class="seed-display"><td>Seed: <%= seed.toString() %></div>
-    <hr class="left-divider">
-    <div class="map-actions">
-        <span class="get-link">
-        <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-link"></span><span class="btn-label">Get link</span></button>
-        </span>
-    </div>
-    <table class="info">
-        <th>
-            Location details:
-        </th>
-        <% if (typeof(mouse) != "undefined") { %>
-        <tr>
-            <td>Coordinates</td>
-            <td><%= Math.round(mouse.x) %>, <%= Math.round(mouse.y) %></td>
-        </tr>
-        <tr>
-            <td>Chunk</td>
-            <td><%= Math.floor(mouse.x/16) %>, <%= Math.floor(mouse.y/16) %></td>
-        </tr>
-        <% } else { %>
-        <tr>
-            <td>Hover or tap to set location</td>
-        </tr>
-        <% } %>
-        <% if (typeof(mouse_biome) != "undefined" && mouse_biome) { %>
-        <tr>
-            <td>Biome</td>
-            <td><%= mouse_biome.name %></td>
-        </tr>
-        <% } %>
-    </table>
+    <% if (typeof(seed) != "undefined" && typeof(levelName) != "undefined") { %>
+        <div class="map-actions">
+            <span class="new-map">
+                <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-plus"></span><span class="btn-label">New Map</span></button>
+            </span>
+        </div>
+        <div class="level-name"><%= levelName %></div>
+        <div class="seed-display"><td>Seed: <%= seed.toString() %></div>
+        <hr class="left-divider">
+        <div class="map-actions">
+            <span class="get-link">
+            <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-link"></span><span class="btn-label">Get link</span></button>
+            </span>
+        </div>
+        <table class="info">
+            <th>
+                Location details:
+            </th>
+            <% if (typeof(mouse) != "undefined") { %>
+            <tr>
+                <td>Coordinates</td>
+                <td><%= Math.round(mouse.x) %>, <%= Math.round(mouse.y) %></td>
+            </tr>
+            <tr>
+                <td>Chunk</td>
+                <td><%= Math.floor(mouse.x/16) %>, <%= Math.floor(mouse.y/16) %></td>
+            </tr>
+            <% } else { %>
+            <tr>
+                <td>Hover or tap to set location</td>
+            </tr>
+            <% } %>
+            <% if (typeof(mouse_biome) != "undefined" && mouse_biome) { %>
+            <tr>
+                <td>Biome</td>
+                <td><%= mouse_biome.name %></td>
+            </tr>
+            <% } %>
+        </table>
+    <% } %>
 </script>
 
 <script type="text/template" id="seed-input-template">
@@ -131,9 +133,9 @@
             </div>
             <div class="seed-col">
                 <div class='input-group'>
-                    <input id="seedin" type="text" class="form-control">
+                    <input type="text" class="seed-in form-control">
                     <span class="input-group-btn">
-                        <button class="btn btn-default" type="button">Set Seed</button>
+                        <button class="text-seed btn btn-default" type="button">Set Seed</button>
                     </span>
                 </div>
             </div>
