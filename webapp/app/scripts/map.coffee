@@ -51,6 +51,10 @@ class window.MineMap
       @map.addLayer(layer)
     L.control.layers({}, @markers, {collapsed:false}).addTo(@map);
 
+  remove: () ->
+    @map.remove()
+    @biomeTiles.remove()
+
   map_coords: (mc_coords) =>
     return @map.options.crs.pointToLatLng({x: mc_coords.x / 8, y: mc_coords.y / 8}, @biomeTiles.layer.options.nativeZoom)
 

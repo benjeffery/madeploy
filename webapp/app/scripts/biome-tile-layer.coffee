@@ -102,6 +102,9 @@ class window.BiomeTileLayer
     }
     @workers = cw(@worker_funcs, 4)
 
+  remove: ->
+    @workers.close()
+
   _drawCanvasTile: (canvas, done) =>
     ctx = canvas.getContext('2d');
     canvas.width = 512

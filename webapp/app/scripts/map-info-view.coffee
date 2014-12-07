@@ -10,7 +10,6 @@ class window.MapInfoView extends Backbone.View
       levelName: undefined
 
   render: =>
-    console.log( @model.toJSON())
     template = _.template($('#mapinfo-template').html(), @model.toJSON());
     @$el.html(template);
 

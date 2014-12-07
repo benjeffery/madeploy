@@ -32,7 +32,10 @@ class window.MapView extends Backbone.View
       clearTimeout(@timeoutId) if @timeoutId
       @mapEl.hide()
       @$seedInputEl.show()
-    if not @map? and seed?
+    if @map?
+      @map.remove()
+      @map = undefined
+    if seed?
       @map = new MineMap(@mapEl, seed)
       @map.map.on 'mousemove', (e) =>
         mc_coords = @map.mc_coords(e.latlng)
@@ -51,11 +54,11 @@ class window.MapView extends Backbone.View
   setSeedFromText: () =>
     val = @$('.seed-in').val()
     if val.match(/^[-+]?\d+$/)
-      name = Long.fromString(val)
+      name = val
       seed = Long.fromString(val)
     else
       name = val
-      seed = @stringHashCode(val)
+      seed = Long.fromNumber(@stringHashCode(val))
     @model.set
       levelName: name
       seed: seed
@@ -78,6 +81,16 @@ class window.MapView extends Backbone.View
         @timeoutId = setTimeout(@updateFromFile, 1000)
     reader.readAsBinaryString(@levelFile)
 
+  randomSeed: () =>
+    randomSeed = ''
+    for i in [0...15]
+      randomSeed += Math.floor(10 * Math.random());
+    randomSeed = '-' + randomSeed if Math.random() < .5
+    @model.set
+      levelName: "Random"
+      seed: Long.fromString(randomSeed)
+
   events:
     'click .text-seed': 'setSeedFromText'
     'change .level-file': 'setFile'
+    'click .random-seed': 'randomSeed'
