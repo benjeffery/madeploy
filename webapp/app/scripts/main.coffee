@@ -1,8 +1,16 @@
 L.Icon.Default.imagePath = '/styles/images'
 
 class MapState extends Backbone.Model
-#  defaults:
-#   seed: nul
+  defaults:
+    features: [
+      {name: 'Player', icon: 'player.png', active: true},
+      {name: 'Villages', icon: 'village.png', active: true},
+      {name: 'Ocean Monuments', icon: 'ocean.png', active: true},
+      {name: 'Jungle Temples', icon: 'chest.png'},
+      {name: 'Desert Temples', icon: 'chest.png'},
+      {name: 'Witch Huts', icon: 'witch.png'},
+      {name: 'Slime Chunks', icon: 'slime.png'},
+    ]
 
 map_state = new MapState
 map_view = new MapView

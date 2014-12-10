@@ -36,7 +36,7 @@ class window.MapView extends Backbone.View
       @map.remove()
       @map = undefined
     if seed?
-      @map = new MineMap(@mapEl, seed)
+      @map = new MineMap(@mapEl, seed, @model.get('features'))
       @map.map.on 'mousemove', (e) =>
         mc_coords = @map.mc_coords(e.latlng)
         @model.set mouse: mc_coords

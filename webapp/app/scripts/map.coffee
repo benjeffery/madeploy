@@ -1,5 +1,5 @@
 class window.MineMap
-  constructor: (@el, @seed) ->
+  constructor: (@el, @seed, @features) ->
     @map = L.map(@el.get(0), {crs: L.CRS.Simple, maxZoom: 18, minZoom: 14})
     @map.setView([0, 0], 16)
     @map.on 'click', (data) =>
@@ -24,32 +24,20 @@ class window.MineMap
     }
     @markers = {}
     @feature_makers = {}
-    @markers.Player = L.layerGroup();
-    @feature_makers.Player = (coords) =>
-      L.marker(@map_coords(coords), {icon:L.icon(_.extend({iconUrl:'markers/player.png'}, m_opts)), opacity:0.75, riseOnHover:true})
-    @markers.Villages = L.layerGroup();
-    @feature_makers.Villages = (coords) =>
-      L.marker(@map_coords(coords), {icon:L.icon(_.extend({iconUrl:'markers/village.png'}, m_opts)), opacity:0.75, riseOnHover:true})
-    @markers['Jungle Temples'] = L.layerGroup();
-    @feature_makers['Jungle Temples'] = (coords) =>
-      L.marker(@map_coords(coords), {icon:L.icon(_.extend({iconUrl:'markers/chest.png'}, m_opts)), opacity:0.75, riseOnHover:true})
-    @markers['Desert Temples'] = L.layerGroup();
-    @feature_makers['Desert Temples'] = (coords) =>
-      L.marker(@map_coords(coords), {icon:L.icon(_.extend({iconUrl:'markers/chest.png'}, m_opts)), opacity:0.75, riseOnHover:true})
-    @markers['Witch Huts'] = L.layerGroup();
-    @feature_makers['Witch Huts'] = (coords) =>
-      L.marker(@map_coords(coords), {icon:L.icon(_.extend({iconUrl:'markers/witch.png'}, m_opts)), opacity:0.75, riseOnHover:true})
-    @markers['Ocean Monuments'] = L.layerGroup();
-    @feature_makers['Ocean Monuments'] = (coords) =>
-      L.marker(@map_coords(coords), {icon:L.icon(_.extend({iconUrl:'markers/ocean.png'}, m_opts)), opacity:0.75, riseOnHover:true})
-
-    @markers['Slime Chunks'] = L.layerGroup();
+    for feature in @features
+      @markers[feature.name] = L.layerGroup();
+      (() =>
+        iconUrl = 'markers/'+feature.icon
+        @feature_makers[feature.name] = (coords) =>
+          L.marker(@map_coords(coords), {icon:L.icon(_.extend({iconUrl:iconUrl}, m_opts)), opacity:0.75, riseOnHover:true})
+      )()
+    #Special case for slimes chunks
     @feature_makers['Slime Chunks'] = (coords) =>
       L.rectangle([@map_coords(coords), @map_coords({x:coords.x+16, y:coords.y+16})],
         {color: "#00FF00", weight: 1, clickable:false, opacity:0.3});
     for name, layer of @markers
       @map.addLayer(layer)
-    L.control.layers({}, @markers, {collapsed:false}).addTo(@map);
+    L.control.layers({}, @markers, {collapsed:true}).addTo(@map);
 
   remove: () ->
     @map.remove()

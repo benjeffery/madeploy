@@ -108,6 +108,18 @@
             </tr>
             <% } %>
         </table>
+        <hr class="left-divider">
+        <div class="feature-toggles">
+            <% _.each(features, function(feature){ %>
+            <div class="feature-toggle <% if (feature.active){ %> active <% } %>" >
+                <span class ="glyphicon <% if (feature.active){ %> glyphicon-check <% } else {%> glyphicon-unchecked <% } %> "></span>
+                <span class="name">
+                    <%= feature.name %>
+                </span>
+                    <img src="markers/<%= feature.icon %>"/>
+            </div>
+            <% }); %>
+        </div>
     <% } %>
 </script>
 

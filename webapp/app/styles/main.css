@@ -174,9 +174,35 @@ h6,
     border-top: solid 1px rgba(0, 0, 0, 0.7);
 }
 
-table.info th {
-    font-weight: normal;
+.feature-toggle {
+    display: inline-block;
+    height: 49px;
+    margin: 2px;
+    padding: 3px;
+    box-shadow: inset 2px 2px 0 #fff;
+    border: solid 1px rgba(0, 0, 0, 0.7);
+    border-radius: 4px;
+    line-height: 41px;
+    cursor: pointer;
 }
+
+.feature-toggle.active {
+    box-shadow: inset -2px -2px 0 #f3f3f3;
+    background-color: rgba(0, 0, 0, 0.15);
+}
+
+.feature-toggle:hover {
+    background-color: rgba(0, 0, 0, 0.075);
+}
+.feature-toggle.active:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.feature-toggle .name {
+    display: inline-block;
+    width: 120px;
+}
+
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
@@ -230,6 +256,10 @@ table.info th {
 }
 
 
+.mapinfo {
+    padding-top: 20px;
+}
+
 @media screen and (min-width: 768px) {
     .minemap {
         height:600px
@@ -239,10 +269,19 @@ table.info th {
 @media screen and (min-width: 768px) {  }
 
 /* Medium devices (desktops, 992px and up) */
-@media screen and (min-width: 992px) { }
+@media screen and (min-width: 992px) {
+    .mapinfo {
+        padding-top: 0px;
+    }
+}
 
 /* Large devices (large desktops, 1200px and up) */
-@media screen and (min-width: 1200px) {  }
+@media screen and (min-width: 1200px) {
+    .mapinfo {
+        padding-top: 0px;
+    }
+
+}
 
 .leaflet-map {
     width:100%;
