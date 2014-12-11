@@ -4,7 +4,9 @@ class window.MapInfoView extends Backbone.View
     @model.on
       'change': @render
   render: =>
-    template = _.template($('#mapinfo-template').html(), @model.toJSON());
+    data = @model.toJSON()
+    data.seed = @model.get('seed').toString()
+    template = _.template($('#mapinfo-template').html(), data);
     @$el.html(template);
 
   newMap: =>
@@ -12,8 +14,13 @@ class window.MapInfoView extends Backbone.View
       seed: undefined
       levelName: undefined
 
-  toggleFeature: (a,b,c) =>
-    console.log(a,b,c)
+  toggleFeature: (evt) =>
+    features = @model.get('features')
+    for f,i in features
+      if f.name == evt.currentTarget.id.replace('_',' ')
+        index = i
+    key = 'features.'+index+'.active'
+    @model.set(key, !@model.get(key))
 
   events:
     'click .new-map > button': 'newMap'

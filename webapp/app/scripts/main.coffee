@@ -1,6 +1,6 @@
 L.Icon.Default.imagePath = '/styles/images'
 
-class MapState extends Backbone.Model
+class MapState extends Backbone.DeepModel
   defaults:
     features: [
       {name: 'Player', icon: 'player.png', active: true},

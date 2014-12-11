@@ -111,7 +111,7 @@
         <hr class="left-divider">
         <div class="feature-toggles">
             <% _.each(features, function(feature){ %>
-            <div class="feature-toggle <% if (feature.active){ %> active <% } %>" >
+            <div class="feature-toggle <% if (feature.active){ %> active <% } %>" id="<%= feature.name.replace(' ','_') %>">
                 <span class ="glyphicon <% if (feature.active){ %> glyphicon-check <% } else {%> glyphicon-unchecked <% } %> "></span>
                 <span class="name">
                     <%= feature.name %>
@@ -173,6 +173,7 @@
 <script src="../bower_components/backbone/backbone.js"></script>
 <script src="../bower_components/long/dist/Long.js"></script>
 <script src="../bower_components/async/lib/async.js"></script>
+<script src="../bower_components/backbone-deep-model/distribution/deep-model.js"></script>
 <!-- endbower -->
 <script src="scripts/leaflet-custom-src.js"></script>
 <script src="scripts/nbt.js"></script>

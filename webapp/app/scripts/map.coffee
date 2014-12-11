@@ -111,6 +111,9 @@ class window.MineMap
     for name, layer of tile.feature_layers
       @markers[name].removeLayer(layer)
 
+  setLayerState: (name, state) =>
+    console.log(name,state)
+
   checkBiomeRegion: (mc_coords, radius, attribute) ->
     left = mc_coords.x - radius >> 2;
     bottom = mc_coords.y - radius >> 2;

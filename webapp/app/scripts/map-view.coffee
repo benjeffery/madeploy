@@ -22,6 +22,13 @@ class window.MapView extends Backbone.View
           dir = @model.get 'dir'
           if pos? and dir?
             @map.setPlayer(pos,dir)
+    for f, i in @model.get 'features'
+      ((f,i) =>
+        @model.on "change:features.#{i}.active", () =>
+          console.log(f)
+          if @map
+            @map.setLayerState(f.name, @model.get("features.#{i}.active"))
+      )(f,i)
 
   render: =>
     seed = @model.get 'seed'
