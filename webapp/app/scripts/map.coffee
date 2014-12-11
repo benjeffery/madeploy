@@ -23,8 +23,12 @@ class window.MineMap
       shadowAnchor: [13, 41]
     }
     @markers = {}
+
+    @static_features = ['Player', 'Strongholds', 'Spawn']
     @feature_makers = {}
+    @feature_layer_state = {}
     for feature in @features
+      @feature_layer_state[feature.name] = feature.active
       @markers[feature.name] = L.layerGroup();
       (() =>
         iconUrl = 'markers/'+feature.icon
@@ -37,7 +41,7 @@ class window.MineMap
         {color: "#00FF00", weight: 1, clickable:false, opacity:0.3});
     for name, layer of @markers
       @map.addLayer(layer)
-    L.control.layers({}, @markers, {collapsed:true}).addTo(@map);
+    @loaded_tiles = []
 
   remove: () ->
     @map.remove()
@@ -85,34 +89,52 @@ class window.MineMap
     @player_marker.setLatLng(@map_coords(pos))
     @map.panTo(@map_coords(pos))
 
-  tileLoad: (tile) =>
+  addTileFeature: (tile, feature) =>
     tile = tile.tile
-    async.parallel {
-      slimes: (callback) =>
-        @slimeCache.get(tile.coords, callback)
-      features: (callback) =>
-        @featureCache.get(tile.coords, callback)
-      },
-      (err, results) =>
-        if err
-          return
-        feature_layers = {}
-        results.features['Slime Chunks'] = results.slimes
-        for feature_name, coords of results.features
-          layer = L.layerGroup()
-          for coord in coords
-            @feature_makers[feature_name](coord).addTo(layer)
-          feature_layers[feature_name] = layer
-          layer.addTo(@markers[feature_name])
-        tile.feature_layers = feature_layers
+    if !tile.feature_layers
+      tile.feature_layers = {}
+    callback = (err, data) =>
+      if err
+        console.log('Err in feature get')
+        return
+      layer = L.layerGroup()
+      for coord in data[feature] || []
+        @feature_makers[feature](coord).addTo(layer)
+      layer.addTo(@markers[feature])
+      tile.feature_layers[feature] = layer
+    if feature == 'Slime Chunks'
+      @slimeCache.get(tile.coords, callback)
+    else
+      @featureCache.get(tile.coords, callback)
+
+  removeTileFeature: (tile, feature) =>
+    tile = tile.tile
+    if (tile.feature_layers?[feature])
+      @markers[feature].removeLayer(tile.feature_layers[feature])
+
+  tileLoad: (tile) =>
+    @loaded_tiles.push(tile)
+    for name, state of @feature_layer_state
+      if !_.contains(@static_features, name) && state
+        @addTileFeature(tile, name)
+    return
 
   tileUnload: (tile) =>
-    tile = tile.tile
-    for name, layer of tile.feature_layers
-      @markers[name].removeLayer(layer)
+    @loaded_tiles = _.without(@loaded_tiles, tile)
+    for name, state of @feature_layer_state
+      if !_.contains(@static_features, name) && state
+        @removeTileFeature(tile, name)
+    return
 
   setLayerState: (name, state) =>
-    console.log(name,state)
+    old_state = @feature_layer_state[name]
+    @feature_layer_state[name] = state
+    if old_state != state
+      for tile in @loaded_tiles
+        if state
+          @addTileFeature(tile, name)
+        else
+          @removeTileFeature(tile, name)
 
   checkBiomeRegion: (mc_coords, radius, attribute) ->
     left = mc_coords.x - radius >> 2;
@@ -131,7 +153,7 @@ class window.MineMap
 
 
   featureProvider: (tile_coord, fcallback) =>
-    console.time('Feature')
+    console.time('Feature'+ tile_coord)
     features = {}
     spacing = 32 #Currently 32 for all features
     top_left = @mcCoordsFromTile(tile_coord)
@@ -155,7 +177,7 @@ class window.MineMap
           y: (c_y*32+rand.nextInt(spacing-separation))*16+8
         }
         if @biomeAt(coords).village
-          (features.Villages ||= []).push(coords)
+          (features['Likely Villages'] ||= []).push(coords)
         temple_seed = seed.add(14357617)
         rand = new JavaRand(temple_seed)
         coords = {
@@ -178,7 +200,7 @@ class window.MineMap
         }
         if @biomeAt(coords).monument && @checkBiomeRegion(coords, 29, 'aquatic')
           (features['Ocean Monuments'] ||= []).push(coords)
-    console.timeEnd('Feature')
+    console.timeEnd('Feature'+ tile_coord)
     fcallback(null, features)
 
   slimeProvider: (tile_coord, callback) =>
@@ -213,4 +235,4 @@ class window.MineMap
           }
           slimes.push(coords)
     console.timeEnd('Slime')
-    callback(null, slimes);
+    callback(null, {'Slime Chunks':slimes});

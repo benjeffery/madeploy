@@ -25,7 +25,6 @@ class window.MapView extends Backbone.View
     for f, i in @model.get 'features'
       ((f,i) =>
         @model.on "change:features.#{i}.active", () =>
-          console.log(f)
           if @map
             @map.setLayerState(f.name, @model.get("features.#{i}.active"))
       )(f,i)

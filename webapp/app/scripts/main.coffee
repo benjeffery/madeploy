@@ -4,7 +4,7 @@ class MapState extends Backbone.DeepModel
   defaults:
     features: [
       {name: 'Player', icon: 'player.png', active: true},
-      {name: 'Villages', icon: 'village.png', active: true},
+      {name: 'Likely Villages', icon: 'village.png', active: true},
       {name: 'Ocean Monuments', icon: 'ocean.png', active: true},
       {name: 'Jungle Temples', icon: 'chest.png'},
       {name: 'Desert Temples', icon: 'chest.png'},
