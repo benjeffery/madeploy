@@ -1,18 +1,18 @@
 class window.MapInfoView extends Backbone.View
   initialize: ->
-    @render
+    @render()
     @model.on
       'change': @render
+
   render: =>
     data = @model.toJSON()
-    data.seed = @model.get('seed').toString()
     template = _.template($('#mapinfo-template').html(), data);
     @$el.html(template);
 
   newMap: =>
     @model.set
-      seed: undefined
-      levelName: undefined
+      seed: false
+      levelName: false
 
   toggleFeature: (evt) =>
     features = @model.get('features')

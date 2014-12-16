@@ -31,7 +31,7 @@ class window.MapView extends Backbone.View
 
   render: =>
     seed = @model.get 'seed'
-    if seed?
+    if seed? && seed
       @$seedInputEl.hide()
       @mapEl.show()
     else
@@ -41,8 +41,8 @@ class window.MapView extends Backbone.View
     if @map?
       @map.remove()
       @map = undefined
-    if seed?
-      @map = new MineMap(@mapEl, seed, @model.get('features'))
+    if seed? && seed
+      @map = new MineMap(@mapEl, Long.fromString(seed), @model.get('features'))
       @map.map.on 'mousemove', (e) =>
         mc_coords = @map.mc_coords(e.latlng)
         @model.set mouse: mc_coords
@@ -67,7 +67,7 @@ class window.MapView extends Backbone.View
       seed = Long.fromNumber(@stringHashCode(val))
     @model.set
       levelName: name
-      seed: seed
+      seed: seed.toString()
 
   setFile: (evt) =>
     @levelFile = evt.target.files[0]
@@ -79,7 +79,7 @@ class window.MapView extends Backbone.View
       nbt.parse reader.result, (error, result) =>
         #Seed is int64 so we have to handle it as string
         @model.set
-          seed:result.Data.RandomSeed
+          seed:result.Data.RandomSeed.toString()
           pos:{x:result.Data.Player.Pos[0], y:result.Data.Player.Pos[2]}
           dir:result.Data.Player.Rotation
           levelName: result.Data.LevelName
@@ -94,7 +94,7 @@ class window.MapView extends Backbone.View
     randomSeed = '-' + randomSeed if Math.random() < .5
     @model.set
       levelName: "Random"
-      seed: Long.fromString(randomSeed)
+      seed: randomSeed
 
   events:
     'click .text-seed': 'setSeedFromText'
