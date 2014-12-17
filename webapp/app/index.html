@@ -29,6 +29,7 @@
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/leaflet.css -->
     <link rel="stylesheet" href="styles/leaflet.css">
+    <link rel="stylesheet" href="styles/octicons.css">
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
@@ -80,7 +81,7 @@
         <hr class="left-divider">
         <div class="map-actions">
             <span class="get-link">
-            <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-link"></span><span class="btn-label">Get link</span></button>
+            <button id="clipboard" class="btn btn-default" type="button"><span class="octicon octicon-clippy"></span><span class="btn-label">Copy link</span></button>
             </span>
         </div>
         <table class="info">
@@ -175,6 +176,7 @@
 <script src="../bower_components/long/dist/Long.js"></script>
 <script src="../bower_components/async/lib/async.js"></script>
 <script src="../bower_components/backbone-deep-model/distribution/deep-model.js"></script>
+<script src="../bower_components/zeroclipboard/dist/ZeroClipboard.js"></script>
 <!-- endbower -->
 <script src="scripts/leaflet-custom-src.js"></script>
 <script src="scripts/nbt.js"></script>

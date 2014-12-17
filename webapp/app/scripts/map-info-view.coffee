@@ -1,5 +1,6 @@
 class window.MapInfoView extends Backbone.View
   initialize: ->
+    @clip = new ZeroClipboard()
     @render()
     @model.on
       'change': @render
@@ -8,6 +9,9 @@ class window.MapInfoView extends Backbone.View
     data = @model.toJSON()
     template = _.template($('#mapinfo-template').html(), data);
     @$el.html(template);
+    @clip.unclip()
+    if document.getElementById("clipboard")
+      @clip.clip(document.getElementById("clipboard"));
 
   newMap: =>
     @model.set

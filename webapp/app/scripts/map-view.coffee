@@ -22,6 +22,10 @@ class window.MapView extends Backbone.View
           dir = @model.get 'dir'
           if pos? and dir?
             @map.setPlayer(pos,dir)
+      'change:mapCentreX change:mapCentreY change:mapZoom': () =>
+        if !@supress_event
+          @map?.map.setView(@map.map_coords({x:@model.get('mapCentreX'),y:@model.get('mapCentreY')}),
+            @model.get('mapZoom'))
     for f, i in @model.get 'features'
       ((f,i) =>
         @model.on "change:features.#{i}.active", () =>
@@ -45,8 +49,17 @@ class window.MapView extends Backbone.View
       @map = new MineMap(@mapEl, Long.fromString(seed), @model.get('features'))
       @map.map.on 'mousemove', (e) =>
         mc_coords = @map.mc_coords(e.latlng)
-        @model.set mouse: mc_coords
-        @model.set mouse_biome: @map.biomeAt(mc_coords)
+        @model.set
+          mouse: mc_coords
+          mouse_biome: @map.biomeAt(mc_coords)
+      @map.map.on 'moveend zoomend', (e) =>
+        centre = @map.mc_coords(@map.map.getCenter())
+        @supress_event = true
+        @model.set
+          mapCentreX: centre.x
+          mapCentreY: centre.y
+          mapZoom: @map.map.getZoom()
+        @supress_event = false
 
   stringHashCode: (string) ->
     hash = 0
