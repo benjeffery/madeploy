@@ -32,6 +32,8 @@ stateToUrl = (state) ->
   else
     return "/"
 
+supress_push_state = false
+
 applyUrlToState = (state, url) ->
   deparam = $.deparam(url)
   obj = {
@@ -46,7 +48,9 @@ applyUrlToState = (state, url) ->
     if deparam[f.name]?
       f.active = deparam[f.name] == 'true'
     obj.features.push(f)
+  supress_push_state = true
   state.set(obj)
+  supress_push_state = false
 
 map_state = new MapState
 
@@ -60,9 +64,17 @@ map_info_view = new MapInfoView
 
 applyUrlToState(map_state, window.location.search.substring(1))
 
-map_state.on 'change:seed change:levelName change:features.* change:mapCentreX change:mapCentreY change:mapZoom', () ->
-  window.history.replaceState({}, "title", stateToUrl(map_state));
+map_state.on 'change', () ->
+  if !supress_push_state
+    if map_state.hasChanged("seed")
+      window.history.pushState({}, "MineAtlas", stateToUrl(map_state));
+    else
+      window.history.replaceState({}, "MineAtlas", stateToUrl(map_state));
   ZeroClipboard.setData("text/plain", window.location.href);
+
+window.onpopstate = (event) ->
+  applyUrlToState(map_state, document.location.search.substring(1))
+
 
 ZeroClipboard.setData("text/plain", window.location.href);
 
