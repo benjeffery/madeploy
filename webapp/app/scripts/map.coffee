@@ -41,6 +41,10 @@ class window.MineMap
         {color: "#00FF00", weight: 1, clickable:false, opacity:0.3});
     for name, layer of @markers
       @map.addLayer(layer)
+    for feature in @features
+      if feature.name in @static_features && !feature.active
+        @map.removeLayer(@markers[feature.name])
+
     @loaded_tiles = []
 
   remove: () ->
@@ -84,10 +88,13 @@ class window.MineMap
       return null
     return window.biome_map[biomes[x + 3 + (y + 3) * 518]]
 
-  setPlayer: (pos, dir) =>
-    @player_marker ?= @feature_makers.Player(pos).addTo(@map)
-    @player_marker.setLatLng(@map_coords(pos))
-    @map.panTo(@map_coords(pos))
+  setStaticFeature: (name, pos_array) =>
+    @markers[name].clearLayers()
+    for pos in pos_array
+      m = @feature_makers[name](pos)
+      m.addTo(@markers[name])
+    return
+    #@map.panTo(@map_coords(pos))
 
   addTileFeature: (tile, feature) =>
     tile = tile.tile
@@ -115,18 +122,24 @@ class window.MineMap
   tileLoad: (tile) =>
     @loaded_tiles.push(tile)
     for name, state of @feature_layer_state
-      if !_.contains(@static_features, name) && state
+      if name not in @static_features && state
         @addTileFeature(tile, name)
     return
 
   tileUnload: (tile) =>
     @loaded_tiles = _.without(@loaded_tiles, tile)
     for name, state of @feature_layer_state
-      if !_.contains(@static_features, name) && state
+      if name not in @static_features && state
         @removeTileFeature(tile, name)
     return
 
   setLayerState: (name, state) =>
+    if name in @static_features
+      if !state
+        @map.removeLayer(@markers[name])
+      else
+        @map.addLayer(@markers[name])
+      return
     old_state = @feature_layer_state[name]
     @feature_layer_state[name] = state
     if old_state != state

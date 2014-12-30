@@ -23,6 +23,7 @@ stateToUrl = (state) ->
     mapCentreX: state.get('mapCentreX'),
     mapCentreY: state.get('mapCentreY'),
     mapZoom: state.get('mapZoom'),
+    pos: state.get('pos'),
   }
   for f in state.get('features')
     if f.active?
@@ -39,14 +40,23 @@ applyUrlToState = (state, url) ->
   obj = {
     levelName: deparam.levelName || 'NoName',
     seed: deparam.seed
-    mapCentreX: deparam.mapCentreX || 0,
-    mapCentreY: deparam.mapCentreY || 0,
-    mapZoom: deparam.mapZoom || 16,
+    mapCentreX: parseInt(deparam.mapCentreX || 0),
+    mapCentreY: parseInt(deparam.mapCentreY || 0),
+    mapZoom: parseInt(deparam.mapZoom || 16),
     features: []
   }
+  pos_disable = true
+  if deparam.pos
+    x = parseFloat(deparam.pos.x)
+    y = parseFloat(deparam.pos.y)
+    if !isNaN(x) && isFinite(x) && !isNaN(y) && isFinite(y)
+      obj.pos = {x:x, y:y}
+      pos_disable = false
   for f in state.get('features')
     if deparam[f.name]?
       f.active = deparam[f.name] == 'true'
+    if f.name == 'Player'
+      f.disabled = pos_disable
     obj.features.push(f)
   supress_push_state = true
   state.set(obj)

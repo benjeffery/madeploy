@@ -1,5 +1,6 @@
 class window.MapView extends Backbone.View
   initialize: ->
+    @$el.empty()
     @$seedInputEl = $($('#seed-input-template').html())
     @$el.append(@$seedInputEl)
     @mapEl = $("
@@ -16,12 +17,13 @@ class window.MapView extends Backbone.View
 
     @model.on
       'change:seed': @render,
-      'change:pos change:dir': () =>
+      'change:pos.* change:dir.*': () =>
         if @map?
           pos = @model.get 'pos'
           dir = @model.get 'dir'
-          if pos? and dir?
-            @map.setPlayer(pos,dir)
+          if pos?
+            @model.set('features.0.disabled', false)
+            @map.setStaticFeature('Player', [pos])
       'change:mapCentreX change:mapCentreY change:mapZoom': () =>
         if !@supress_event
           @map?.map.setView(@map.map_coords({x:@model.get('mapCentreX'),y:@model.get('mapCentreY')}),
@@ -52,6 +54,10 @@ class window.MapView extends Backbone.View
         @model.set
           mouse: mc_coords
           mouse_biome: @map.biomeAt(mc_coords)
+      @map.map.on 'mouseout', (e) =>
+        @model.set
+          mouse: null
+          mouse_biome: null
       @map.map.on 'moveend zoomend', (e) =>
         centre = @map.mc_coords(@map.map.getCenter())
         @supress_event = true

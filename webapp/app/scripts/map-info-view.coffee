@@ -7,6 +7,7 @@ class window.MapInfoView extends Backbone.View
 
   render: =>
     data = @model.toJSON()
+#    console.log(data)
     template = _.template($('#mapinfo-template').html(), data);
     @$el.html(template);
     @clip.unclip()
