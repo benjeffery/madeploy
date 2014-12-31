@@ -63,6 +63,7 @@ applyUrlToState = (state, url) ->
   supress_push_state = false
 
 map_state = new MapState
+window.map_state = map_state
 
 map_view = new MapView
   model: map_state

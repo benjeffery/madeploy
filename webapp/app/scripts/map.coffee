@@ -1,7 +1,7 @@
 class window.MineMap
-  constructor: (@el, @seed, @features) ->
+  constructor: (@el, @seed, @features, initial_x, initial_y, initial_zoom) ->
     @map = L.map(@el.get(0), {crs: L.CRS.Simple, maxZoom: 18, minZoom: 14})
-    @map.setView([0, 0], 16)
+    @map.setView([initial_x, initial_y], initial_zoom)
     @map.on 'click', (data) =>
       c = @mc_coords(data.latlng)
       console.log('/tp '+c.x+' 100 '+c.y)

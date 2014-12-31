@@ -64,10 +64,7 @@
     <div class="row">
         <div class="col-md-8 minemap">Sorry you need javascript turned on for this map to work</div>
         <div class="col-md-4">
-            <div class="mapinfo">MineAlas is a biome map of your Minecraft world
-                which also works as a village finder, slime finder, ocean monument finder
-                and other things finder.<br/>
-
+            <div class="mapinfo">
             </div>
         </div>
     </div>
@@ -129,6 +126,11 @@
             </div>
             <% }); %>
         </div>
+    <% } else { %>
+    MineAlas is a biome map of your Minecraft world.
+    It also works as a village finder, slime finder, ocean monument finder
+    and other things finder.<br/>
+    Load a saved game, enter a seed or get a random map to get started.
     <% } %>
 </script>
 

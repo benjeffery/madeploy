@@ -48,7 +48,14 @@ class window.MapView extends Backbone.View
       @map.remove()
       @map = undefined
     if seed? && seed
-      @map = new MineMap(@mapEl, Long.fromString(seed), @model.get('features'))
+      @map = new MineMap(
+        @mapEl,
+        Long.fromString(seed),
+        @model.get('features'),
+        @model.get('mapCentreX'),
+        @model.get('mapCentreY'),
+        @model.get('mapZoom'),
+      )
       @map.map.on 'mousemove', (e) =>
         mc_coords = @map.mc_coords(e.latlng)
         @model.set
