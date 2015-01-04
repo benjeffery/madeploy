@@ -56,7 +56,7 @@ module.exports = function (grunt) {
                     '<%= config.app %>/{,*/}*.html',
                     '.tmp/styles/{,*/}*.css',
                     '.tmp/scripts/{,*/}*.js',
-                    '<%= config.app %>/images/{,*/}*'
+                    '<%= config.app %>/styles/images/{,*/}*'
                 ]
             }
         },
@@ -197,8 +197,7 @@ module.exports = function (grunt) {
                     src: [
                         '<%= config.dist %>/scripts/{,*/}*.js',
                         '<%= config.dist %>/styles/{,*/}*.css',
-                        '<%= config.dist %>/images/{,*/}*.*',
-                        '<%= config.dist %>/styles/fonts/{,*/}*.*',
+                        '<%= config.dist %>/styles/images/{,*/}*.*',
                         '<%= config.dist %>/*.{ico,png}'
                     ]
                 }
@@ -218,7 +217,7 @@ module.exports = function (grunt) {
         // Performs rewrites based on rev and the useminPrepare configuration
         usemin: {
             options: {
-                assetsDirs: ['<%= config.dist %>', '<%= config.dist %>/images']
+                assetsDirs: ['<%= config.dist %>', '<%= config.dist %>/markers', '<%= config.dist %>/styles/images']
             },
             html: ['<%= config.dist %>/{,*/}*.html'],
             css: ['<%= config.dist %>/styles/{,*/}*.css']
@@ -227,12 +226,16 @@ module.exports = function (grunt) {
         // The following *-min tasks produce minified files in the dist folder
         imagemin: {
             dist: {
-                files: [{
+              dynamic: {
+                files: [
+                  {
                     expand: true,
-                    cwd: '<%= config.app %>/images',
+                    cwd: '<%= config.app %>/styles/images',
                     src: '{,*/}*.{gif,jpeg,jpg,png}',
-                    dest: '<%= config.dist %>/images'
-                }]
+                    dest: '<%= config.dist %>/styles/images'
+                  }
+                ]
+              }
             }
         },
 
@@ -240,9 +243,9 @@ module.exports = function (grunt) {
             dist: {
                 files: [{
                     expand: true,
-                    cwd: '<%= config.app %>/images',
+                    cwd: '<%= config.app %>/styles/images',
                     src: '{,*/}*.svg',
-                    dest: '<%= config.dist %>/images'
+                    dest: '<%= config.dist %>/styles/images'
                 }]
             }
         },
@@ -312,11 +315,14 @@ module.exports = function (grunt) {
                     cwd: '<%= config.app %>',
                     dest: '<%= config.dist %>',
                     src: [
-                        '*.{ico,png,txt}',
+                        '*.{ico,png,txt,xml,swf}',
                         '.htaccess',
                         'images/{,*/}*.webp',
                         '{,*/}*.html',
-                        'styles/fonts/{,*/}*.*'
+                        'styles/fonts/{,*/}*.*',
+                        'styles/images/{,*/}*.*',
+                        'markers/{,*/}*.*',
+                        'styles/{,*/}*.{eot,svg,ttf,woff}'
                     ]
                 }, {
                     expand: true,
@@ -331,7 +337,7 @@ module.exports = function (grunt) {
                 dot: true,
                 cwd: '<%= config.app %>/styles',
                 dest: '.tmp/styles/',
-                src: '{,*/}*.css'
+                src: '{,*/}*'
             }
         },
 
@@ -347,6 +353,7 @@ module.exports = function (grunt) {
             ],
             dist: [
                 'coffee',
+                'coffee:dist',
                 'copy:styles',
                 'imagemin',
                 'svgmin'
@@ -392,6 +399,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build', [
         'clean:dist',
+        'copy:coffee',
         'useminPrepare',
         'concurrent:dist',
         'autoprefixer',
