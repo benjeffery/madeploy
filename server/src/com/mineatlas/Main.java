@@ -36,6 +36,19 @@ public class Main implements Container {
         try {
             System.out.println(request.getPath());
             if (request.getPath().toString().equals("/data")) {
+
+                response.setValue("Content-Type", "text/plain");
+                response.setValue("Server", "MineData/1.0");
+                response.setValue("Content-Encoding", "gzip");
+                response.setValue("Cache-Control", "public");
+                String origin = request.getValue("Origin");
+                String origin_response = "http://mineatlas.com";
+                if (origin.equals("https://mineatlas.com"))
+                    origin_response = origin;
+                if (origin.equals("http://0.0.0.0:9000"))
+                    origin_response = origin;
+                response.setValue("Access-Control-Allow-Origin", origin_response);
+
                 final int x = Integer.parseInt(request.getParameter("x"));
                 final int y = Integer.parseInt(request.getParameter("y"));
                 final long seed = Long.parseLong(request.getParameter("seed"));
@@ -49,13 +62,6 @@ public class Main implements Container {
                         byte_data[i] = (byte) data[i];
                     }
                 }
-
-                response.setValue("Content-Type", "text/plain");
-                response.setValue("Server", "MineData/1.0");
-                response.setValue("Content-Encoding", "gzip");
-                response.setValue("Cache-Control", "public, max-age=200");
-                response.setValue("Access-Control-Allow-Origin", request.getValue("Origin"));
-
 
                 OutputStream out_stream = response.getOutputStream();
                 GZIPOutputStream zos = new GZIPOutputStream(out_stream);

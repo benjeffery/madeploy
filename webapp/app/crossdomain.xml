@@ -1,4 +1,4 @@
 <cross-domain-policy>
     <site-control permitted-cross-domain-policies="master-only"/>
-    <allow-access-from domain="*"/>
+    <allow-access-from domain="mineatlas.com"/>
 </cross-domain-policy>

@@ -139,7 +139,7 @@ class window.BiomeTileLayer
     xhr.send()
 
   tileProvider: (params, callback) =>
-    @request("http://localhost:8000/data?seed=#{@seed.toString()}&type=Default&x=#{params.c_x}&y=#{params.c_y}",
+    @request("http://data.mineatlas.com/data?seed=#{@seed.toString()}&type=Default&x=#{params.c_x}&y=#{params.c_y}",
     ((biome_data) =>
       data = {biome_data:biome_data.buffer, c_x:params.c_x, c_y:params.c_y}
       @workers.calc_pixels(data, [data.biome_data]).then (ret_data) ->
