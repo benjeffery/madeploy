@@ -43,10 +43,12 @@ public class Main implements Container {
                 response.setValue("Cache-Control", "public");
                 String origin = request.getValue("Origin");
                 String origin_response = "http://mineatlas.com";
-                if (origin.equals("https://mineatlas.com"))
-                    origin_response = origin;
-                if (origin.equals("http://0.0.0.0:9000"))
-                    origin_response = origin;
+                if (origin != null) {
+                    if (origin.equals("https://mineatlas.com"))
+                        origin_response = origin;
+                    if (origin.equals("http://0.0.0.0:9000"))
+                        origin_response = origin;
+                }
                 response.setValue("Access-Control-Allow-Origin", origin_response);
 
                 final int x = Integer.parseInt(request.getParameter("x"));
