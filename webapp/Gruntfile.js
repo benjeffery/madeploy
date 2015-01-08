@@ -322,7 +322,8 @@ module.exports = function (grunt) {
                         'styles/fonts/{,*/}*.*',
                         'styles/images/{,*/}*.*',
                         'markers/{,*/}*.*',
-                        'styles/{,*/}*.{eot,svg,ttf,woff}'
+                        'styles/{,*/}*.{eot,svg,ttf,woff}',
+                        'scripts/*.swf'
                     ]
                 }, {
                     expand: true,
