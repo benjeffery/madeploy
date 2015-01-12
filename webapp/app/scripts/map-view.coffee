@@ -35,6 +35,17 @@ class window.MapView extends Backbone.View
             @map.setLayerState(f.name, @model.get("features.#{i}.active"))
       )(f,i)
 
+  setLocation: (latlng) =>
+    if latlng
+      mc_coords = @map.mc_coords(latlng)
+      @model.set
+        mouse: mc_coords
+        mouse_biome: @map.biomeAt(mc_coords)
+    else
+      @model.set
+        mouse: null
+        mouse_biome: null
+
   render: =>
     seed = @model.get 'seed'
     if seed? && seed
@@ -56,15 +67,12 @@ class window.MapView extends Backbone.View
         @model.get('mapCentreY'),
         @model.get('mapZoom'),
       )
+      @map.map.on 'click', (e) =>
+        @setLocation(e.latlng) 
       @map.map.on 'mousemove', (e) =>
-        mc_coords = @map.mc_coords(e.latlng)
-        @model.set
-          mouse: mc_coords
-          mouse_biome: @map.biomeAt(mc_coords)
+        @setLocation(e.latlng)
       @map.map.on 'mouseout', (e) =>
-        @model.set
-          mouse: null
-          mouse_biome: null
+        @setLocation(null)
       @map.map.on 'moveend zoomend', (e) =>
         centre = @map.mc_coords(@map.map.getCenter())
         @supress_event = true

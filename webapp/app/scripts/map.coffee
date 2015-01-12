@@ -18,9 +18,9 @@ class window.MineMap
       shadowUrl: 'markers/marker-shadow.png',
       iconSize: [25, 41],
       iconAnchor: [12, 41],
-      popupAnchor: [-3, -76],
+      popupAnchor: [0, -36],
       shadowSize: [41, 41],
-      shadowAnchor: [13, 41]
+      shadowAnchor: [13, 41],
     }
     @markers = {}
 
@@ -32,8 +32,11 @@ class window.MineMap
       @markers[feature.name] = L.layerGroup();
       (() =>
         iconUrl = 'markers/'+feature.icon
+        title = feature.name
+        title = (if title == 'Player' then title else title.slice(0,-1))
         @feature_makers[feature.name] = (coords) =>
-          L.marker(@map_coords(coords), {icon:L.icon(_.extend({iconUrl:iconUrl}, m_opts)), opacity:0.75, riseOnHover:true})
+          L.marker(@map_coords(coords), {title: title, icon:L.icon(_.extend({iconUrl:iconUrl}, m_opts)), opacity:0.75, riseOnHover:true,
+          }).bindPopup("#{title}<br>x:#{coords.x} y:#{coords.y}")
       )()
     #Special case for slimes chunks
     @feature_makers['Slime Chunks'] = (coords) =>
