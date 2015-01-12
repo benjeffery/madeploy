@@ -68,7 +68,7 @@ class window.MapView extends Backbone.View
         @model.get('mapZoom'),
       )
       @map.map.on 'click', (e) =>
-        @setLocation(e.latlng) 
+        @setLocation(e.latlng)
       @map.map.on 'mousemove', (e) =>
         @setLocation(e.latlng)
       @map.map.on 'mouseout', (e) =>

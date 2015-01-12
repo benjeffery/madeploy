@@ -1,6 +1,6 @@
 class window.MineMap
   constructor: (@el, @seed, @features, initial_x, initial_y, initial_zoom) ->
-    @map = L.map(@el.get(0), {crs: L.CRS.Simple, maxZoom: 18, minZoom: 14})
+    @map = L.map(@el.get(0), {crs: L.CRS.Simple, maxZoom: 18, minZoom: 14, bounceAtZoomLimits:false})
     @map.setView([initial_x, initial_y], initial_zoom)
     @map.on 'click', (data) =>
       c = @mc_coords(data.latlng)
