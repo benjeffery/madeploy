@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="simple-5.1.5">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/simple-5.1.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/amidst.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/lib/amidst.jar!/doc" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/amidst.jar!/" />
+    </SOURCES>
+  </library>
+</component>
