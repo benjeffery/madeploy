@@ -81,13 +81,19 @@ map_state.on 'change', () ->
       window.history.pushState({}, "MineAtlas", stateToUrl(map_state));
     else
       window.history.replaceState({}, "MineAtlas", stateToUrl(map_state));
-  ZeroClipboard.setData("text/plain", window.location.href);
+  if @model.get('ZCdisable')
+    document.getElementById("clipboard")?.href = window.location.href
+  else
+    ZeroClipboard.setData("text/plain", window.location.href);
 
 window.onpopstate = (event) ->
   applyUrlToState(map_state, document.location.search.substring(1))
 
 
 ZeroClipboard.setData("text/plain", window.location.href);
+
+ZeroClipboard.on "error", () ->
+  map_state.set('ZCdisable', true)
 
 #map_state.set({
 #  levelName:'Chunky Salsa',

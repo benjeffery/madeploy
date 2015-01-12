@@ -85,7 +85,7 @@
         <hr class="left-divider">
         <div class="map-actions">
             <span class="get-link">
-            <button id="clipboard" class="btn btn-default" type="button"><span class="octicon octicon-clippy"></span><span class="btn-label">Copy link</span></button>
+            <button id="clipboard" class="btn btn-default" type="button"><span class="octicon octicon-clippy"></span><span class="btn-label"> <% if (typeof(ZCdisable) != "undefined" && ZCdisable) { %>PermaLink<% }else{ %>Copy Link<% } %></span></button>
             </span>
         </div>
         <table class="info">

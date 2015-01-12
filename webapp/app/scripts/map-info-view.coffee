@@ -9,9 +9,10 @@ class window.MapInfoView extends Backbone.View
   render: =>
     data = @model.toJSON()
     @$el.html(@template(data));
-    @clip.unclip()
-    if document.getElementById("clipboard")
-      @clip.clip(document.getElementById("clipboard"));
+    if not @model.get('ZCdisable')
+      @clip.unclip()
+      if document.getElementById("clipboard")
+        @clip.clip(document.getElementById("clipboard"));
 
   newMap: =>
     @model.set
