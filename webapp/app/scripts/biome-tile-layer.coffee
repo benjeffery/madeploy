@@ -6,10 +6,7 @@ class window.BiomeTileLayer
     @cache = new Cache(@tileProvider, 75)
     @worker_funcs = {
       init: () ->
-        importScripts('scripts/seedrandom.js')
-        importScripts('scripts/perlin.js')
-        importScripts('scripts/biome_data.js')
-        importScripts('scripts/seedrandom.js')
+        importScripts('scripts/worker.js')
         self.PerlinSimplex.noiseDetail(3, .5)
         @parabolic = new Float32Array(25);
         for y in [-2 ... 2]

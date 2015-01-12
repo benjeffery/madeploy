@@ -217,10 +217,16 @@ module.exports = function (grunt) {
         // Performs rewrites based on rev and the useminPrepare configuration
         usemin: {
             options: {
-                assetsDirs: ['<%= config.dist %>', '<%= config.dist %>/markers', '<%= config.dist %>/styles/images']
+                assetsDirs: ['<%= config.dist %>', '<%= config.dist %>/markers', '<%= config.dist %>/styles/images'],
+                patterns: {
+                    js: [
+                      [/(scripts\/.*?\.(?:js))/gm, 'Update the JS to reference our revved JS']
+                    ]
+                }
             },
             html: ['<%= config.dist %>/{,*/}*.html'],
-            css: ['<%= config.dist %>/styles/{,*/}*.css']
+            css: ['<%= config.dist %>/styles/{,*/}*.css'],
+            js: ['<%= config.dist %>/scripts/{,*/}*.js']
         },
 
         // The following *-min tasks produce minified files in the dist folder
