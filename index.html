@@ -15,7 +15,7 @@
         <hr class="left-divider">
         <div class="map-actions">
             <span class="get-link">
-            <button id="clipboard" class="btn btn-default" type="button"><span class="octicon octicon-clippy"></span><span class="btn-label">Copy link</span></button>
+            <button id="clipboard" class="btn btn-default" type="button"><span class="octicon octicon-clippy"></span><span class="btn-label"> <% if (typeof(ZCdisable) != "undefined" && ZCdisable) { %>PermaLink<% }else{ %>Copy Link<% } %></span></button>
             </span>
         </div>
         <table class="info">
@@ -57,7 +57,7 @@
             <% }); %>
         </div>
     <% } else { %>
-    MineAlas is a biome map of your Minecraft world.
+    MineAtlas is a biome map of your Minecraft world.
     It also works as a village finder, slime finder, ocean monument finder
     and other things finder.<br/>
     Load a saved game, enter a seed or get a random map to get started.
@@ -100,4 +100,4 @@
                 <button class="random-seed btn btn-default" type="button">Random Seed</button>
             </div>
         </div>
-    </div></script><script src=scripts/93790e50.vendor.js></script><script src=scripts/c6b52431.plugins.js></script><script src=scripts/a377626d.coffee.js></script>
+    </div></script><script src=scripts/3ae4318d.vendor.js></script><script src=scripts/c6b52431.plugins.js></script><script src=scripts/d6899107.coffee.js></script><script src=scripts/9c50467c.worker.js></script>
