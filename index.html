@@ -82,9 +82,10 @@
             </div>
             <div class="seed-col">
                 <div class='input-group'>
-                    <input type="text" class="seed-in form-control">
+                    <input type="text" class="seed-in form-control" maxlength="32"
+                           onkeydown="if (event.keyCode == 13) document.getElementById('set-seed').click()">
                     <span class="input-group-btn">
-                        <button class="text-seed btn btn-default" type="button">Set Seed</button>
+                        <button class="text-seed btn btn-default" type="button" id="set-seed">Set Seed</button>
                     </span>
                 </div>
             </div>
@@ -100,4 +101,4 @@
                 <button class="random-seed btn btn-default" type="button">Random Seed</button>
             </div>
         </div>
-    </div></script><script src=scripts/75e84dbc.js.js></script><script src=scripts/9c50467c.worker.js></script>
+    </div></script><script src=scripts/5848911a.js.js></script><script src=scripts/9c50467c.worker.js></script>
